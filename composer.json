@@ -1,5 +1,14 @@
 {
     "type": "project",
+    "name": "monsterluni/uek_295",
+    "description": "This Project was created because of the uek-295",
+    "authors": [
+        {
+            "name":"Luca Moser",
+            "email": "monsterluni@gmail.com",
+            "role": "Student"
+        }
+    ],
     "license": "proprietary",
     "minimum-stability": "stable",
     "prefer-stable": true,
