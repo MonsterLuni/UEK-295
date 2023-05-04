@@ -81,14 +81,14 @@ class Story
 
     public function setstorie(?string $storie): self
     {
-        $this->storie = $storie;
+        $this->story = $storie;
 
         return $this;
     }
 
     public function getstorie(): ?string
     {
-        return $this->storie;
+        return $this->story;
     }
 
     /**

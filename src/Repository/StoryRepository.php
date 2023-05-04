@@ -2,6 +2,7 @@
 
 namespace App\Repository;
 
+use App\DTO\FilterStory;
 use App\Entity\Story;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
@@ -37,6 +38,23 @@ class StoryRepository extends ServiceEntityRepository
         if ($flush) {
             $this->getEntityManager()->flush();
         }
+    }
+
+    public function filterAll(FilterStory $dtoFilter){
+        $qb = $this->createQueryBuilder("b");
+
+        if($dtoFilter->likes){
+            $qb = $qb->andWhere("b.likes = :likes")
+            ->setParameter("likes", $dtoFilter->likes);
+        }
+        if($dtoFilter->dislikes){
+            $qb = $qb->andWhere("b.dislikes = :dislikes")
+                ->setParameter("dislikes", $dtoFilter->dislikes);
+        }
+
+        return $qb
+            ->getQuery()
+            ->getResult();
     }
 
 //    /**
