@@ -75,6 +75,19 @@ class StoryController extends AbstractFOSRestController
     #[Rest\Put('/story/{id}', name: 'app_story_update')]
     public function story_update(Request $request, $id): JsonResponse
     {
+        $dto = $this->serializer->deserialize($request->getContent(), CreateUpdateStory::class, "json");
+        $entitystory = $this->repository->find($id);
+
+        $entitystory->setTitle($dto->title);
+        $entitystory->setstorie($dto->storie);
+        $entitystory->setLikes($dto->likes);
+        $entitystory->setDislikes($dto->dislikes);
+        $entitystory->setAuthor($dto->author);
+
+        if(!$entitystory) {
+            return $this->json("Story with ID " . $id . " doesn't exist!", status: 403);
+        }
+        $this->repository->save($entitystory, true);
         return $this->json("Story with ID " . $id . " Succesfully Changed");
     }
 }
