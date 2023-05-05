@@ -115,7 +115,6 @@ class StoryController extends AbstractFOSRestController
         //   $entitystory->setAuthor($dto->author);
         //}
 
-
         $this->repository->save($entitystory, true);
         return $this->json("Story with ID " . $id . " Succesfully Changed");
     }
