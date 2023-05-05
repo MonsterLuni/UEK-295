@@ -7,7 +7,6 @@ use App\DTO\FilterStory;
 use App\DTO\Mapper\ShowStoryMapper;
 use App\Entity\Story;
 use App\Repository\StoryRepository;
-use ContainerKfy227g\getRouting_LoaderService;
 use FOS\RestBundle\Controller\Annotations as Rest;
 use FOS\RestBundle\Controller\AbstractFOSRestController;
 use JMS\Serializer\SerializerInterface;

@@ -63,12 +63,9 @@ class CommentController extends AbstractController
 
         //Hier checke ich, ob es eine Story mit der gewünschten ID gibt, wenn nicht wird es sofort abgebrochen, da es sont einen Fehler gibt
         $entitystory = $storyrepository->find($dto->refstory);
-        if(!$entitystory) {
-            return $this->json("Story with ID {$dto->refstory} does not exist!", status: 403);
-        }
 
         $entity = new Comments();
-        $entity->setRefstory($story);
+        $entity->setRefstory($entitystory);
         $entity->setText($dto->text);
         $entity->setLikes($dto->likes);
         $entity->setDislikes($dto->dislikes);
