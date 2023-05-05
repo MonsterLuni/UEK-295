@@ -38,6 +38,17 @@ class CommentController extends AbstractController
         }
     }
 
+    #[Rest\Get('/comment', name: 'app_comment_get')]
+    public function comment_get(Request $request): JsonResponse
+    {
+        $comment = $this->repository->findAll();
+
+        return (new JsonResponse())->setContent(
+            $this->serializer->serialize(
+                $this->mapper->mapEntitiesToDTOs($comment), "json"
+            )
+        );
+    }
 
     #[Rest\Post('/comment', name: 'app_comment_create')]
     public function comment_create(Request $request, StoryRepository $storyrepository): JsonResponse
@@ -90,7 +101,7 @@ class CommentController extends AbstractController
             return $this->json("Comment with ID " . $id . " does not exist! ", status: 403);
         }
 
-        $errorResponse = $this->validateDTO($dto, ["updatee"]);
+        $errorResponse = $this->validateDTO($dto, ["update"]);
         if($errorResponse){return $errorResponse;}
 
         $entitystory->setText($dto->text);
