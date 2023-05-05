@@ -24,7 +24,12 @@ class StoryController extends AbstractFOSRestController
                                 private ShowStoryMapper $mapper,
                                 private ValidatorInterface $validator){}
 
-    private function validateDTO($dto, $groups = ["create"]){
+    /**
+     * Validates stuff
+     * @param $dto. the dto gets validated.
+     * @return JsonResponse returns an array of error messages (can be empty)
+     */
+    private function validateDTO($dto, $groups = ["create"]) : JsonResponse{
         $errors = $this->validator->validate($dto, groups: $groups);
 
         if($errors->count() > 0){
