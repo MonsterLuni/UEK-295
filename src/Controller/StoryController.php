@@ -57,7 +57,7 @@ class StoryController extends AbstractFOSRestController
     ))]
     #[Response(
         response: 200,
-        description: "Gibt Alle Storys gekoppelt mit Kommentaren zurück, falls verfügbar",
+        description: "Wenn man die Felder leer lässt, gibt es alle Storys an, man kann Filter hinzufügen wie: mindestanzahl Likes/Dislikes und nach dem Autor Filtern.",
         content: new JsonContent(
             type: 'array',
             items: new Items(
@@ -79,6 +79,7 @@ class StoryController extends AbstractFOSRestController
         $dtoFilter = new FilterStory();
     }
             $story = $this->repository->filterAll($dtoFilter) ?? [];
+
             if($story == []){
                 return $this->json("Keine Storys mit diesem Filter gefunden!");
             }

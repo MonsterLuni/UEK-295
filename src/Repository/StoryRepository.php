@@ -53,8 +53,8 @@ class StoryRepository extends ServiceEntityRepository
             }
         }
         if($dtoFilter->author){
-            $qb = $qb->andWhere("b.author = :author")
-                ->setParameter("author", $dtoFilter->author);
+            $qb = $qb->andWhere("b.author like :author")
+                ->setParameter("author", $dtoFilter->author."%");
         }
             return $qb
                 ->getQuery()
