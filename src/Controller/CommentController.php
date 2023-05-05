@@ -50,6 +50,11 @@ class CommentController extends AbstractController
         $errorResponse = $this->validateDTO($dto, ["create"]);
         if($errorResponse){return $errorResponse;}
 
+        $entitystory = $this->repository->find($dto->refstory);
+        if(!$entitystory) {
+            return $this->json("Story with ID {$dto->refstory} does not exist!", status: 403);
+        }
+
         $entity = new Comments();
         $entity->setRefstory($story);
         $entity->setText($dto->text);
