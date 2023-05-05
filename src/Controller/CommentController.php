@@ -40,7 +40,7 @@ class CommentController extends AbstractController
 
 
     #[Rest\Post('/comment', name: 'app_comment_create')]
-    public function comment_create(Request $request): JsonResponse
+    public function comment_create(Request $request, StoryRepository $storyrepository): JsonResponse
     {
         $dto = $this->serializer->deserialize($request->getContent(), CreateUpdateComment::class, "json");
 
@@ -50,7 +50,8 @@ class CommentController extends AbstractController
         $errorResponse = $this->validateDTO($dto, ["create"]);
         if($errorResponse){return $errorResponse;}
 
-        $entitystory = $this->repository->find($dto->refstory);
+        //Hier checke ich, ob es eine
+        $entitystory = $storyrepository->find($dto->refstory);
         if(!$entitystory) {
             return $this->json("Story with ID {$dto->refstory} does not exist!", status: 403);
         }
