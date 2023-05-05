@@ -22,10 +22,10 @@ class Story
     private ?string $story = null;
 
     #[ORM\Column(nullable: true)]
-    private ?int $likes = null;
+    private ?int $likes = 0;
 
     #[ORM\Column(nullable: true)]
-    private ?int $dislikes = null;
+    private ?int $dislikes = 0;
 
     #[ORM\OneToMany(mappedBy: 'refstory', targetEntity: Comments::class, orphanRemoval: true)]
     private Collection $storie;

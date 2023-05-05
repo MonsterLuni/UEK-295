@@ -5,11 +5,19 @@ namespace App\Controller;
 use App\DTO\CreateUpdateStory;
 use App\DTO\FilterStory;
 use App\DTO\Mapper\ShowStoryMapper;
+use App\DTO\ShowStory;
 use App\Entity\Story;
 use App\Repository\StoryRepository;
 use FOS\RestBundle\Controller\Annotations as Rest;
 use FOS\RestBundle\Controller\AbstractFOSRestController;
 use JMS\Serializer\SerializerInterface;
+use Nelmio\ApiDocBundle\Annotation\Model;
+use OpenApi\Attributes\Items;
+use OpenApi\Attributes\Get;
+use OpenApi\Attributes\JsonContent;
+use OpenApi\Attributes\Post;
+use OpenApi\Attributes\RequestBody;
+use OpenApi\Attributes\Response;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
@@ -29,7 +37,7 @@ class StoryController extends AbstractFOSRestController
      * @param $dto. the dto gets validated.
      * @return JsonResponse returns an array of error messages (can be empty)
      */
-    private function validateDTO($dto, $groups = ["create"]) : JsonResponse{
+    private function validateDTO($dto, $groups = ["create"]){
         $errors = $this->validator->validate($dto, groups: $groups);
 
         if($errors->count() > 0){
@@ -40,7 +48,24 @@ class StoryController extends AbstractFOSRestController
             return $this->json($errorStringArray, status: 400);
         }
     }
-
+    #[Get(requestBody: new RequestBody(
+        content: new JsonContent(
+            ref: new Model(
+                type: FilterStory::class
+            )
+        )
+    ))]
+    #[Response(
+        response: 200,
+        description: "Gibt sachen zurück bre",
+        content: new JsonContent(
+            type: 'array',
+            items: new Items(
+                ref: new Model(
+                    type: ShowStory::class)
+            )
+        )
+    )]
     #[Rest\Get('/story', name: 'app_story_get')]
     public function story_get(Request $request): JsonResponse
     {
@@ -64,6 +89,16 @@ class StoryController extends AbstractFOSRestController
             )
         );
     }
+    #[Post(
+        requestBody: new RequestBody(
+            content: new JsonContent(
+                ref: new Model(
+                    type: CreateUpdateStory::class,
+                    groups: ["create"]
+                )
+            )
+        )
+    )]
     #[Rest\Post('/story', name: 'app_story_create')]
     public function story_create(Request $request): JsonResponse
     {

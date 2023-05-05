@@ -8,9 +8,9 @@ class ShowStory
 
     public ?string $storie = null;
 
-    public ?int $likes = null;
+    public ?int $likes = 0;
 
-    public ?int $dislikes = null;
+    public ?int $dislikes = 0;
 
     public ?string $author = null;
 
