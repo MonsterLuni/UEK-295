@@ -32,18 +32,27 @@ class CommentController extends AbstractController
 
         $story = $this->srepository->find($dto->refstory);
 
-
         $entity = new Comments();
         $entity->setRefstory($story);
         $entity->setText($dto->text);
         $entity->setLikes($dto->likes);
         $entity->setDislikes($dto->dislikes);
 
-
         $this->repository->save($entity, true);
 
         return (new JsonResponse())->setContent(
             $this->serializer->serialize($this->mapper->mapEntityToDTO($entity),"json")
         );
+    }
+
+    #[Rest\Delete('/comment/{id}', name: 'app_comment_delete')]
+    public function comment_delete(Request $request, $id): JsonResponse
+    {
+        $entitystory = $this->repository->find($id);
+        if(!$entitystory) {
+            return $this->json("Comment with ID {$id} does not exist!", status: 403);
+        }
+        $this->repository->remove($entitystory, true);
+        return $this->json("Comment with ID " . $id . " Succesfully Deleted");
     }
 }

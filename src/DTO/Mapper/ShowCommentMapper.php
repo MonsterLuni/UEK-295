@@ -4,10 +4,11 @@ namespace App\DTO\Mapper;
 
 use App\DTO\ShowComment;
 
-class ShowCommentMapper
+class ShowCommentMapper extends BaseMapper
 {
     public function mapEntityToDTO(object $entity)
     {
+
         $dto = new ShowComment();
         $dto->refstory = $entity->getrefstory()->getTitle();
         $dto->text = $entity->gettext();

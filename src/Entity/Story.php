@@ -35,7 +35,8 @@ class Story
 
     public function __construct()
     {
-        $this->story = new ArrayCollection();
+        // this is da comment sectiön
+        $this->storie = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -86,7 +87,7 @@ class Story
         return $this;
     }
 
-    public function getstorie(): ?string
+    public function getStorie(): ?string
     {
         return $this->story;
     }
@@ -94,27 +95,27 @@ class Story
     /**
      * @return Collection<int, Comments>
      */
-    public function getStory(): Collection
+    public function getComments(): Collection
     {
-        return $this->story;
+        return $this->storie;
     }
 
-    public function addStory(Comments $story): self
+    public function addComment(Comments $story): self
     {
-        if (!$this->story->contains($story)) {
-            $this->story->add($story);
+        if (!$this->storie->contains($story)) {
+            $this->storie->add($story);
             $story->setRefstory($this);
         }
 
         return $this;
     }
 
-    public function removeStory(Comments $story): self
+    public function removeComment(Comments $comment): self
     {
-        if ($this->story->removeElement($story)) {
+        if ($this->storie->removeElement($comment)) {
             // set the owning side to null (unless already changed)
-            if ($story->getRefstory() === $this) {
-                $story->setRefstory(null);
+            if ($comment->getRefstory() === $this) {
+                $comment->setRefstory(null);
             }
         }
 

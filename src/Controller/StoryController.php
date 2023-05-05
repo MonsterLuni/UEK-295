@@ -7,12 +7,14 @@ use App\DTO\FilterStory;
 use App\DTO\Mapper\ShowStoryMapper;
 use App\Entity\Story;
 use App\Repository\StoryRepository;
+use ContainerKfy227g\getRouting_LoaderService;
 use FOS\RestBundle\Controller\Annotations as Rest;
 use FOS\RestBundle\Controller\AbstractFOSRestController;
 use JMS\Serializer\SerializerInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 #[Route("/api", name: "api_")]
 class StoryController extends AbstractFOSRestController
@@ -20,7 +22,8 @@ class StoryController extends AbstractFOSRestController
 
     public function __construct(private SerializerInterface $serializer,
                                 private StoryRepository $repository,
-                                private ShowStoryMapper $mapper){}
+                                private ShowStoryMapper $mapper,
+                                private ValidatorInterface $validator){}
 
     #[Rest\Get('/story', name: 'app_story_get')]
     public function story_get(Request $request): JsonResponse
@@ -49,6 +52,18 @@ class StoryController extends AbstractFOSRestController
     {
         $dto = $this->serializer->deserialize($request->getContent(), CreateUpdateStory::class, "json");
 
+        //Zum Validieren vom $dto in der Datei CreateUpdateStory.php
+        $errors = $this->validator->validate($dto, groups: ["create"]);
+
+        if($errors->count() > 0){
+            $errorStringArray = [];
+            foreach($errors as $error){
+                $errorStringArray[] = $error->getMessage();
+            }
+            return $this->json($errorStringArray, status: 400);
+        }
+
+        //Kreirt ein objekt Story als $entity, und füllt es dann mit dem $dto
         $entity = new Story();
         $entity->setTitle($dto->title);
         $entity->setstorie($dto->storie);
@@ -67,7 +82,7 @@ class StoryController extends AbstractFOSRestController
     {
         $entitystory = $this->repository->find($id);
         if(!$entitystory) {
-            return $this->json("Haustier mit ID {$id} existiert nicht!", status: 403);
+            return $this->json("Story with ID {$id} does not exist!", status: 403);
         }
         $this->repository->remove($entitystory, true);
         return $this->json("Story with ID " . $id . " Succesfully Deleted");

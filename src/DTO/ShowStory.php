@@ -13,4 +13,7 @@ class ShowStory
     public ?int $dislikes = null;
 
     public ?string $author = null;
+
+    public $comments = [];
+
 }
