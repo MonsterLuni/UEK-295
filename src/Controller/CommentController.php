@@ -46,11 +46,11 @@ class CommentController extends AbstractController
 
         $story = $this->srepository->find($dto->refstory);
 
-        //Zum Validieren vom $dto in der Datei CreateUpdateStory.php (bezieht sich auf Function validateDTO)
+        //Zum Validieren vom $dto in der Datei CreateUpdateComment.php (bezieht sich auf Function validateDTO)
         $errorResponse = $this->validateDTO($dto, ["create"]);
         if($errorResponse){return $errorResponse;}
 
-        //Hier checke ich, ob es eine
+        //Hier checke ich, ob es eine Story mit der gewünschten ID gibt, wenn nicht wird es sofort abgebrochen, da es sont einen Fehler gibt
         $entitystory = $storyrepository->find($dto->refstory);
         if(!$entitystory) {
             return $this->json("Story with ID {$dto->refstory} does not exist!", status: 403);
@@ -78,5 +78,26 @@ class CommentController extends AbstractController
         }
         $this->repository->remove($entitystory, true);
         return $this->json("Comment with ID " . $id . " Succesfully Deleted");
+    }
+
+    #[Rest\Put('/comment/{id}', name: 'app_comment_update')]
+    public function comment_update(Request $request, $id): JsonResponse
+    {
+        $dto = $this->serializer->deserialize($request->getContent(), CreateUpdateComment::class, "json");
+        $entitystory = $this->repository->find($id);
+
+        if(!$entitystory) {
+            return $this->json("Comment with ID " . $id . " does not exist! ", status: 403);
+        }
+
+        $errorResponse = $this->validateDTO($dto, ["updatee"]);
+        if($errorResponse){return $errorResponse;}
+
+        $entitystory->setText($dto->text);
+        $entitystory->setLikes($dto->likes);
+        $entitystory->setDislikes($dto->dislikes);
+
+        $this->repository->save($entitystory, true);
+        return $this->json("Comment with ID " . $id . " Succesfully Changed");
     }
 }
