@@ -57,6 +57,19 @@ class StoryRepository extends ServiceEntityRepository
             ->getResult();
     }
 
+    public function filterAuthor(FilterStory $dtoFilter){
+        $qb = $this->createQueryBuilder("b");
+
+        if($dtoFilter->author){
+            $qb = $qb->andWhere("b.author = :author")
+                ->setParameter("author", $dtoFilter->author);
+        }
+
+        return $qb
+            ->getQuery()
+            ->getResult();
+    }
+
 //    /**
 //     * @return Story[] Returns an array of Story objects
 //     */

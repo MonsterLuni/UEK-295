@@ -50,7 +50,8 @@ class StoryController extends AbstractFOSRestController
     }
 
 
-        $story = $this->repository->filterAll($dtoFilter) ?? [];
+        //$story = $this->repository->filterAll($dtoFilter) ?? [];
+        $story = $this->repository->filterAuthor($dtoFilter) ?? [];
 
         return (new JsonResponse())->setContent(
             $this->serializer->serialize(
