@@ -42,31 +42,23 @@ class StoryRepository extends ServiceEntityRepository
 
     public function filterAll(FilterStory $dtoFilter){
         $qb = $this->createQueryBuilder("b");
-
-        if($dtoFilter->likes){
-            $qb = $qb->andWhere("b.likes = :likes")
-            ->setParameter("likes", $dtoFilter->likes);
+        if(!($dtoFilter->likes = 0 && $dtoFilter->dislikes = 0)){
+            if($dtoFilter->likes){
+                $qb = $qb->andWhere("b.likes >= :likes")
+                ->setParameter("likes", $dtoFilter->likes);
+            }
+            if($dtoFilter->dislikes){
+                $qb = $qb->andWhere("b.dislikes >= :dislikes")
+                    ->setParameter("dislikes", $dtoFilter->dislikes);
+            }
         }
-        if($dtoFilter->dislikes){
-            $qb = $qb->andWhere("b.dislikes = :dislikes")
-                ->setParameter("dislikes", $dtoFilter->dislikes);
-        }
-
-        return $qb
-            ->getQuery()
-            ->getResult();
-    }
-    public function filterAuthor(FilterStory $dtoFilter){
-        $qb = $this->createQueryBuilder("b");
-
         if($dtoFilter->author){
             $qb = $qb->andWhere("b.author = :author")
                 ->setParameter("author", $dtoFilter->author);
         }
-
-        return $qb
-            ->getQuery()
-            ->getResult();
+            return $qb
+                ->getQuery()
+                ->getResult();
     }
 
 //    /**

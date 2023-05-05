@@ -57,7 +57,7 @@ class StoryController extends AbstractFOSRestController
     ))]
     #[Response(
         response: 200,
-        description: "Gibt sachen zurück bre",
+        description: "Gibt Alle Storys gekoppelt mit Kommentaren zurück, falls verfügbar",
         content: new JsonContent(
             type: 'array',
             items: new Items(
@@ -78,16 +78,18 @@ class StoryController extends AbstractFOSRestController
         catch(\Exception $ex){
         $dtoFilter = new FilterStory();
     }
+            $story = $this->repository->filterAll($dtoFilter) ?? [];
+            if($story == []){
+                return $this->json("Keine Storys mit diesem Filter gefunden!");
+            }
+            else{
+                return (new JsonResponse())->setContent(
+                    $this->serializer->serialize(
+                        $this->mapper->mapEntitiesToDTOs($story), "json"
+                    )
+                );
+            }
 
-
-        //$story = $this->repository->filterAll($dtoFilter) ?? [];
-        $story = $this->repository->filterAuthor($dtoFilter) ?? [];
-
-        return (new JsonResponse())->setContent(
-            $this->serializer->serialize(
-                $this->mapper->mapEntitiesToDTOs($story), "json"
-            )
-        );
     }
     #[Post(
         requestBody: new RequestBody(
@@ -96,6 +98,17 @@ class StoryController extends AbstractFOSRestController
                     type: CreateUpdateStory::class,
                     groups: ["create"]
                 )
+            )
+        )
+    )]
+    #[Response(
+        response: 200,
+        description: "Man kann alles Kreieren ausser Likes&Dislikes",
+        content: new JsonContent(
+            type: 'array',
+            items: new Items(
+                ref: new Model(
+                    type: ShowStory::class)
             )
         )
     )]
