@@ -25,6 +25,18 @@ class StoryController extends AbstractFOSRestController
                                 private ShowStoryMapper $mapper,
                                 private ValidatorInterface $validator){}
 
+    private function validateDTO($dto, $groups = ["create"]){
+        $errors = $this->validator->validate($dto, groups: $groups);
+
+        if($errors->count() > 0){
+            $errorStringArray = [];
+            foreach($errors as $error){
+                $errorStringArray[] = $error->getMessage();
+            }
+            return $this->json($errorStringArray, status: 400);
+        }
+    }
+
     #[Rest\Get('/story', name: 'app_story_get')]
     public function story_get(Request $request): JsonResponse
     {
@@ -52,16 +64,9 @@ class StoryController extends AbstractFOSRestController
     {
         $dto = $this->serializer->deserialize($request->getContent(), CreateUpdateStory::class, "json");
 
-        //Zum Validieren vom $dto in der Datei CreateUpdateStory.php
-        $errors = $this->validator->validate($dto, groups: ["create"]);
-
-        if($errors->count() > 0){
-            $errorStringArray = [];
-            foreach($errors as $error){
-                $errorStringArray[] = $error->getMessage();
-            }
-            return $this->json($errorStringArray, status: 400);
-        }
+        //Zum Validieren vom $dto in der Datei CreateUpdateStory.php (bezieht sich auf Function validateDTO)
+        $errorResponse = $this->validateDTO($dto, ["create"]);
+        if($errorResponse){return $errorResponse;}
 
         //Kreirt ein objekt Story als $entity, und füllt es dann mit dem $dto
         $entity = new Story();
@@ -97,11 +102,18 @@ class StoryController extends AbstractFOSRestController
             return $this->json("Story with ID " . $id . " does not exist! ", status: 403);
         }
 
+        //Zum Validieren vom $dto in der Datei CreateUpdateStory.php (bezieht sich auf Function validateDTO)
+        $errorResponse = $this->validateDTO($dto, ["create"]);
+        if($errorResponse){return $errorResponse;}
+
         $entitystory->setTitle($dto->title);
         $entitystory->setstorie($dto->storie);
         $entitystory->setLikes($dto->likes);
         $entitystory->setDislikes($dto->dislikes);
-        $entitystory->setAuthor($dto->author);
+        //Checkt ob im Author etwas drin ist, wenn nicht ändert es ihn nicht (unnötig deswegen auskommentiert)
+        //if($dto->author){
+        //   $entitystory->setAuthor($dto->author);
+        //}
 
 
         $this->repository->save($entitystory, true);
