@@ -42,12 +42,12 @@ class StoryRepository extends ServiceEntityRepository
 
     public function filterAll(FilterStory $dtoFilter){
         $qb = $this->createQueryBuilder("b");
-        if(!($dtoFilter->likes = 0 && $dtoFilter->dislikes = 0)){
-            if($dtoFilter->likes){
+        if(!($dtoFilter->likes == 0 && $dtoFilter->dislikes == 0)){
+            if(!($dtoFilter->likes == 0)){
                 $qb = $qb->andWhere("b.likes >= :likes")
-                ->setParameter("likes", $dtoFilter->likes);
+                    ->setParameter("likes", $dtoFilter->likes);
             }
-            if($dtoFilter->dislikes){
+            if(!($dtoFilter->dislikes == 0)){
                 $qb = $qb->andWhere("b.dislikes >= :dislikes")
                     ->setParameter("dislikes", $dtoFilter->dislikes);
             }

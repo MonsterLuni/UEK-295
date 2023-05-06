@@ -47,6 +47,7 @@ class StoryController extends AbstractFOSRestController
             }
             return $this->json($errorStringArray, status: 400);
         }
+        return null;
     }
     #[Get(requestBody: new RequestBody(
         content: new JsonContent(
@@ -116,13 +117,14 @@ class StoryController extends AbstractFOSRestController
     #[Rest\Post('/story', name: 'app_story_create')]
     public function story_create(Request $request): JsonResponse
     {
+        //Deserializiert den Requestbody im Typ der Klasse CreateUpdateStory, welches im Format "json" ist. Dies speichert es dann in eine VAriable die $dto heisst
         $dto = $this->serializer->deserialize($request->getContent(), CreateUpdateStory::class, "json");
 
         //Zum Validieren vom $dto in der Datei CreateUpdateStory.php (bezieht sich auf Function validateDTO)
         $errorResponse = $this->validateDTO($dto, ["create"]);
         if($errorResponse){return $errorResponse;}
 
-        //Kreirt ein objekt Story als $entity, und füllt es dann mit dem $dto
+        //Kreirt eine iteration des objektes Story als $entity, und füllt es dann mit dem $dto
         $entity = new Story();
         $entity->setTitle($dto->title);
         $entity->setstorie($dto->storie);

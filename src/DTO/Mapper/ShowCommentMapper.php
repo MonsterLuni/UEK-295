@@ -6,7 +6,7 @@ use App\DTO\ShowComment;
 
 class ShowCommentMapper extends BaseMapper
 {
-    public function mapEntityToDTO(object $entity)
+    public function mapEntityToDTO(object $entity) : ShowComment
     {
 
         $dto = new ShowComment();

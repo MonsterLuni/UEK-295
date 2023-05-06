@@ -14,8 +14,8 @@ class CreateUpdateComment
     //ES GIBT UPDATE NOCH NICHT
     #[Assert\NotBlank(message: "Es muss ein Text angegeben werden", groups: ["create", "update"])]
     public ?string $text = null;
-    #[Assert\PositiveOrZero(message: "Die anzahl muss mindestensPositiv sein", groups: ["create","update"])]
+    #[Assert\PositiveOrZero(message: "Die anzahl Likes muss Positiv sein", groups: ["create","update"])]
     public ?int $likes = null;
-    #[Assert\PositiveOrZero(message: "Die anzahl muss Positiv sein", groups: ["create","update"])]
+    #[Assert\PositiveOrZero(message: "Die anzahl Dislikes muss Positiv sein", groups: ["create","update"])]
     public ?int $dislikes = null;
 }
