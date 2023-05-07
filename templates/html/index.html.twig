@@ -11,13 +11,24 @@
 <div class="example-wrapper">
     <h1>Hello {{ user_name }}!  ✅</h1>
     <h2>Storys:</h2>
+
     {% for story in storys  %}
-    <h3>Title: {{ story.title }}</h3>
-    <p>Story: {{ story.storie }}</p>
+    <h2>Title: {{ story.title }}</h2>
     <h4>Author: {{ story.author }}</h4>
+    <p>Story: {{ story.storie }}</p>
     <p>Likes: {{ story.likes }}</p>
     <p>Dislikes: {{ story.dislikes }}</p>
         <br>
+    <h3>Kommentare</h3>
+        {% for comment in story.comments %}
+        <p>Text: {{ comment.text }}</p>
+        <p>Likes: {{ comment.likes }}</p>
+        <p>Dislikes: {{ comment.dislikes }}</p>
+            <br>
+        {% else %}
+        <p>Es gibt noch keine Kommentare, sei der erste!</p>
+        {% endfor %}
+            <br>
     {% endfor %}
 
     This friendly message is coming from:
