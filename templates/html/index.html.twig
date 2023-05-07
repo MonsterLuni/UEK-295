@@ -78,10 +78,10 @@
     <div class="story comment">
         <p>{{ comment.text }}</p>
         <div class="a">
-            <div class="c" id="likes" onclick="httpPut('http://localhost:8000/api/comment/1')">
+            <div class="c" id="likes" onclick="httpPutLikes_DislikesComment('http://localhost:8000/api/comment/' + {{ comment.id }},{{ comment.id }}, true)">
         <p>Likes: {{ comment.likes }}</p>
             </div>
-                <div class="c" id="likes">
+                <div class="c" id="likes" onclick="httpPutLikes_DislikesComment('http://localhost:8000/api/comment/' + {{ comment.id }},{{ comment.id }}, false)">
         <p>Dislikes: {{ comment.dislikes }}</p>
                 </div>
         </div>
@@ -101,18 +101,35 @@
         <li>Your template at <code><a href="{{ 'D:/Symfony/UEK-295/templates/html/index.html.twig'|file_link(0) }}">templates/html/index.html.twig</a></code></li>
     </ul>
 <script>
-    function httpPut(theUrl)
+    function httpPutLikes_DislikesComment(theUrl,verify_id,LorD)
     {
-        var xmlHttp = new XMLHttpRequest();
+        {% for story in storys%}
+        {% for comment in story.comments %}
+        if ({{ comment.id }} == verify_id){
+            Likes = {{ comment.Likes }};
+            Dislikes = {{ comment.Dislikes }};
+            if(LorD){
+                Likes++
+            }
+            else{
+                Dislikes++
+            }
+        const xmlHttp = new XMLHttpRequest();
         xmlHttp.open( "PUT", theUrl, true ); // false for synchronous request
         xmlHttp.setRequestHeader('Content-Type', 'application/json')
         xmlHttp.send(JSON.stringify({
-            "text": "Hallo du HUND",
-            "likes": 1,
-            "dislikes": 2
+            "text": "{{ comment.text }}",
+            "likes": Likes,
+            "dislikes": Dislikes
         }));
+        location.reload();
         return xmlHttp.responseText;
+        }
+        {% endfor %}
+        {% endfor %}
     }
+
+
 </script>
 </div>
 {% endblock %}
