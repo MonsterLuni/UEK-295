@@ -1,23 +1,69 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Hello HtmlController!{% endblock %}
-
+{% block title %}Archive of Myself{% endblock %}
+{% block stylesheets %}<link rel="stylesheet" type="text/css" href="../css/styles.css" />{% endblock %}
 {% block body %}
 <style>
     .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
     .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
+    body{
+        background-color: #1b1b1b;
+        color: white;
+    }
+    .story{
+        background-color: #222222;
+        height: auto;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        border-radius: 20px;
+        overflow-wrap: break-word;
+        padding-left: 2vw;
+        padding-right: 2vw;
+        padding-bottom: 2vw;
+    }
+    .a{
+        user-select: none;
+        width: 100%;
+        height: 100%;
+        display: flex;
+        justify-content: space-evenly;
+        align-items: end;
+    }
+    .c:hover{
+        background-color: #383838;
+    }
+    .c:active{
+        background-color: #2e3136;
+    }
+    .c{
+        border-radius: 20px;
+        display: flex;
+        width: 30%;
+        justify-content: center;
+    }
+
 </style>
 
 <div class="example-wrapper">
     <h1>Hello {{ user_name }}!  ✅</h1>
     <h2>Storys:</h2>
 
-    {% for story in storys  %}
-    <h2>Title: {{ story.title }}</h2>
-    <h4>Author: {{ story.author }}</h4>
-    <p>Story: {{ story.storie }}</p>
-    <p>Likes: {{ story.likes }}</p>
-    <p>Dislikes: {{ story.dislikes }}</p>
+    {% for story in storys%}
+        <div class="story">
+    <h2>{{ story.title }}</h2>
+    <p>{{ story.storie }}</p>
+            <br>
+            <h4>{{ story.author }}</h4>
+            <div class="a">
+                <div class="c" id="likes">
+            <p>Likes: {{ story.likes }}</p>
+                </div>
+                <div class="c" id="dislikes">
+            <p>Dislikes: {{ story.dislikes }}</p>
+                </div>
+            </div>
+        </div>
         <br>
     <h3>Kommentare</h3>
         {% for comment in story.comments %}

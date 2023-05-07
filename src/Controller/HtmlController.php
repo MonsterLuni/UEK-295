@@ -23,4 +23,8 @@ class HtmlController extends AbstractController
             'user_name' => $name,
         ]);
     }
+
+    public function test(string $nummer){
+        return $nummer;
+}
 }
