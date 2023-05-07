@@ -78,8 +78,8 @@
     <div class="story comment">
         <p>{{ comment.text }}</p>
         <div class="a">
-            <div class="c" id="likes">
-        <p >Likes: {{ comment.likes }}</p>
+            <div class="c" id="likes" onclick="httpPut('http://localhost:8000/api/comment/1')">
+        <p>Likes: {{ comment.likes }}</p>
             </div>
                 <div class="c" id="likes">
         <p>Dislikes: {{ comment.dislikes }}</p>
@@ -95,11 +95,25 @@
             <br>
         <br>
     {% endfor %}
-
     This friendly message is coming from:
     <ul>
         <li>Your controller at <code><a href="{{ 'D:/Symfony/UEK-295/src/Controller/HtmlController.php'|file_link(0) }}">src/Controller/HtmlController.php</a></code></li>
         <li>Your template at <code><a href="{{ 'D:/Symfony/UEK-295/templates/html/index.html.twig'|file_link(0) }}">templates/html/index.html.twig</a></code></li>
     </ul>
+<script>
+    function httpPut(theUrl)
+    {
+        var xmlHttp = new XMLHttpRequest();
+        xmlHttp.open( "PUT", theUrl, true ); // false for synchronous request
+        xmlHttp.setRequestHeader('Content-Type', 'application/json')
+        xmlHttp.send(JSON.stringify({
+            "text": "Hallo du HUND",
+            "likes": 1,
+            "dislikes": 2
+        }));
+        return xmlHttp.responseText;
+    }
+</script>
 </div>
 {% endblock %}
+

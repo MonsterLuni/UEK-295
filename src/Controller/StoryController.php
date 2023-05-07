@@ -12,10 +12,12 @@ use FOS\RestBundle\Controller\Annotations as Rest;
 use FOS\RestBundle\Controller\AbstractFOSRestController;
 use JMS\Serializer\SerializerInterface;
 use Nelmio\ApiDocBundle\Annotation\Model;
+use OpenApi\Attributes\Delete;
 use OpenApi\Attributes\Items;
 use OpenApi\Attributes\Get;
 use OpenApi\Attributes\JsonContent;
 use OpenApi\Attributes\Post;
+use OpenApi\Attributes\Put;
 use OpenApi\Attributes\RequestBody;
 use OpenApi\Attributes\Response;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -58,7 +60,7 @@ class StoryController extends AbstractFOSRestController
     ))]
     #[Response(
         response: 200,
-        description: "Wenn man die Felder leer lässt, gibt es alle Storys an, man kann Filter hinzufügen wie: mindestanzahl Likes/Dislikes und nach dem Autor Filtern.",
+        description: "When you want to see every Story or don't want to filter anything, you can just keep the Request-Body empty",
         content: new JsonContent(
             type: 'array',
             items: new Items(
@@ -105,7 +107,7 @@ class StoryController extends AbstractFOSRestController
     )]
     #[Response(
         response: 200,
-        description: "Man kann alles Kreieren ausser Likes&Dislikes",
+        description: "If the Request-Body is valid you get your Story as the Response, else you get an Error-message",
         content: new JsonContent(
             type: 'array',
             items: new Items(
@@ -128,8 +130,6 @@ class StoryController extends AbstractFOSRestController
         $entity = new Story();
         $entity->setTitle($dto->title);
         $entity->setstorie($dto->storie);
-        $entity->setLikes($dto->likes);
-        $entity->setDislikes($dto->dislikes);
         $entity->setAuthor($dto->author);
 
         $this->repository->save($entity, true);
@@ -138,6 +138,18 @@ class StoryController extends AbstractFOSRestController
             $this->serializer->serialize($this->mapper->mapEntityToDTO($entity),"json")
         );
     }
+    #[Delete]
+    #[Response(
+        response: 200,
+        description: "When you enter an ID that's valid, you will se the Entity that you just deleted.",
+        content: new JsonContent(
+            type: 'array',
+            items: new Items(
+                ref: new Model(
+                    type: ShowStory::class)
+            )
+        )
+    )]
     #[Rest\Delete('/story/{id}', name: 'app_story_delete')]
     public function story_delete(Request $request, $id): JsonResponse
     {
@@ -148,6 +160,27 @@ class StoryController extends AbstractFOSRestController
         $this->repository->remove($entitystory, true);
         return $this->json("Story with ID " . $id . " Succesfully Deleted");
     }
+    #[Put(
+        requestBody: new RequestBody(
+            content: new JsonContent(
+                ref: new Model(
+                    type: CreateUpdateStory::class,
+                    groups: ["update"]
+                )
+            )
+        )
+    )]
+    #[Response(
+        response: 200,
+        description: "If the Request-Body & the ID in the url is valid you get the message, that the change on your entity is complete, else you get an Error-message",
+        content: new JsonContent(
+            type: 'array',
+            items: new Items(
+                ref: new Model(
+                    type: JsonContent::class)
+            )
+        )
+    )]
     #[Rest\Put('/story/{id}', name: 'app_story_update')]
     public function story_update(Request $request, $id): JsonResponse
     {
