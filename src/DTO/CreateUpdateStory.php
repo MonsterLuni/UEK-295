@@ -14,12 +14,10 @@ class CreateUpdateStory
     #[Assert\NotBlank(message: "Story darf nicht leer sein.",groups: ["create", "update"])]
     public ?string $storie = null;
     #[Groups(["update"])]
-    #[Assert\Blank(message: "Die Anzahl Likes darf nicht selber gesetzt werden", groups: ["create"])]
-    #[Assert\PositiveOrZero(message: "Die Anzahl Likes muss Positiv sein", groups: ["update"])]
+    #[Assert\PositiveOrZero(message: "Die Anzahl Likes muss Positiv sein", groups: ["update","create"])]
     public ?int $likes = 0;
     #[Groups(["update"])]
-    #[Assert\Blank(message: "Die Anzahl Dislikes darf nicht selber gesetzt werden", groups: ["create"])]
-    #[Assert\PositiveOrZero(message: "Die Anzahl Dislikes muss Positiv sein", groups: ["update"])]
+    #[Assert\PositiveOrZero(message: "Die Anzahl Dislikes muss Positiv sein", groups: ["update","create"])]
     public ?int $dislikes = 0;
     #[Groups(["create","update"])]
     #[Assert\Blank(message: "Author muss leer sein / Darf nicht verändert werden.",groups: ["update"])]

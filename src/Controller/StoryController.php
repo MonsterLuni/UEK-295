@@ -192,7 +192,7 @@ class StoryController extends AbstractFOSRestController
         }
 
         //Zum Validieren vom $dto in der Datei CreateUpdateStory.php (bezieht sich auf Function validateDTO)
-        $errorResponse = $this->validateDTO($dto, ["create"]);
+        $errorResponse = $this->validateDTO($dto, ["update"]);
         if($errorResponse){return $errorResponse;}
 
         $entitystory->setTitle($dto->title);

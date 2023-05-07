@@ -63,10 +63,10 @@
             <br>
             <h4>{{ story.author }}</h4>
             <div class="a">
-                <div class="c" id="likes">
+                <div class="c" id="likes" onclick="httpPutLikes_DislikesStory('http://localhost:8000/api/story/' + {{ story.id }},{{ story.id }}, true)">
             <p>Likes: {{ story.likes }}</p>
                 </div>
-                <div class="c" id="dislikes">
+                <div class="c" id="dislikes" onclick="httpPutLikes_DislikesStory('http://localhost:8000/api/story/' + {{ story.id }},{{ story.id }}, false)">
             <p>Dislikes: {{ story.dislikes }}</p>
                 </div>
             </div>
@@ -126,6 +126,34 @@
         return xmlHttp.responseText;
         }
         {% endfor %}
+        {% endfor %}
+    }
+
+    function httpPutLikes_DislikesStory(theUrl,verify_id,LorD)
+    {
+        {% for story in storys%}
+        if ({{ story.id }} == verify_id){
+        Likes = {{ story.Likes }};
+        Dislikes = {{ story.Dislikes }};
+        if(LorD){
+            Likes++
+        }
+        else{
+            Dislikes++
+        }
+        const xmlHttp = new XMLHttpRequest();
+        xmlHttp.open( "PUT", theUrl, true ); // false for synchronous request
+        xmlHttp.setRequestHeader('Content-Type', 'application/json')
+        xmlHttp.send(JSON.stringify({
+            "title": "{{ story.title }}",
+            "storie": "{{ story.storie }}",
+            "likes": Likes,
+            "dislikes": Dislikes,
+            "author": ""
+        }));
+        location.reload();
+        return xmlHttp.responseText;
+        }
         {% endfor %}
     }
 
