@@ -131,6 +131,8 @@ class StoryController extends AbstractFOSRestController
         $entity->setTitle($dto->title);
         $entity->setstorie($dto->storie);
         $entity->setAuthor($dto->author);
+        $entity->setLikes($dto->likes);
+        $entity->setDislikes($dto->dislikes);
 
         $this->repository->save($entity, true);
 

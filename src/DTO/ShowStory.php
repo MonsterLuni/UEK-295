@@ -14,6 +14,6 @@ class ShowStory
 
     public ?string $author = null;
 
-    public $comments = [];
+    public ?array $comments = [];
 
 }

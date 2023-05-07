@@ -36,6 +36,7 @@ class CommentController extends AbstractController
             }
             return $this->json($errorStringArray, status: 400);
         }
+        return null;
     }
 
     #[Rest\Get('/comment', name: 'app_comment_get')]
