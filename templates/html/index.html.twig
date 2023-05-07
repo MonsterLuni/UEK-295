@@ -20,7 +20,7 @@
         overflow-wrap: break-word;
         padding-left: 2vw;
         padding-right: 2vw;
-        padding-bottom: 2vw;
+
     }
     .a{
         user-select: none;
@@ -29,6 +29,7 @@
         display: flex;
         justify-content: space-evenly;
         align-items: end;
+        padding-bottom: 1vw;
     }
     .c:hover{
         background-color: #383838;
@@ -42,7 +43,9 @@
         width: 30%;
         justify-content: center;
     }
-
+    h3,h1,h2{
+        text-align: center;
+    }
 </style>
 
 <div class="example-wrapper">
@@ -65,16 +68,28 @@
             </div>
         </div>
         <br>
-    <h3>Kommentare</h3>
+        <h3>Kommentare</h3>
+        <br>
         {% for comment in story.comments %}
-        <p>Text: {{ comment.text }}</p>
-        <p>Likes: {{ comment.likes }}</p>
+    <div class="story">
+        <p>{{ comment.text }}</p>
+        <div class="a">
+            <div class="c" id="likes">
+        <p >Likes: {{ comment.likes }}</p>
+            </div>
+                <div class="c" id="likes">
         <p>Dislikes: {{ comment.dislikes }}</p>
+                </div>
+        </div>
+    </div>
             <br>
         {% else %}
+    <div class="story">
         <p>Es gibt noch keine Kommentare, sei der erste!</p>
+    </div>
         {% endfor %}
             <br>
+        <br>
     {% endfor %}
 
     This friendly message is coming from:
