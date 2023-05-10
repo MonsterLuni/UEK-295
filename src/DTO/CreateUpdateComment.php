@@ -12,7 +12,7 @@ class CreateUpdateComment
     #[StoryDoesExist(groups: ["create"])]
     public ?int $refstory = null;
     //ES GIBT UPDATE NOCH NICHT
-    #[Assert\NotBlank(message: "Es muss ein Text angegeben werden", groups: ["create", "update"])]
+    #[Assert\NotBlank(message: "Es muss ein Text angegeben werden", groups: ["create"])]
     public ?string $text = null;
     #[Assert\PositiveOrZero(message: "Die anzahl Likes muss Positiv sein", groups: ["create","update"])]
     public ?int $likes = null;
