@@ -2,6 +2,38 @@
 
 {% block title %}Archive of Myself{% endblock %}
 {% block stylesheets %}<link rel="stylesheet" type="text/css" href="../css/styles.css" />{% endblock %}
+{% block javascripts %}
+    <script>
+        function httpPutLikes_DislikesComment(id,LikeOrDislike)
+        {
+            const xmlHttp = new XMLHttpRequest();
+            xmlHttp.open( "PUT", 'http://localhost:8000/api/comment/' + id, true ); // false for synchronous request
+            xmlHttp.setRequestHeader('Content-Type', 'application/json')
+            xmlHttp.send(JSON.stringify({
+                "text": "",
+                "likes": LikeOrDislike,
+                "dislikes": 0
+            }));
+            location.reload();
+            return xmlHttp.responseText;
+        }
+
+        function httpPutLikes_DislikesStory(id,LikeOrDislike)
+        {
+            const xmlHttp = new XMLHttpRequest();
+            xmlHttp.open( "PUT", 'http://localhost:8000/api/story/' + id, true ); // false for synchronous request
+            xmlHttp.setRequestHeader('Content-Type', 'application/json')
+            xmlHttp.send(JSON.stringify({
+                "title": "",
+                "likes": LikeOrDislike,
+                "dislikes": 0
+            }));
+            location.reload();
+            return xmlHttp.responseText;
+        }
+
+    </script>
+{% endblock %}
 {% block body %}
 <style>
     .example-wrapper { background-color: #1b1b1b; margin: 1em auto; max-width: 1000px; width: 95%; font: 18px/1.5 sans-serif; display: flex; flex-direction: column; align-items: center; }
@@ -63,10 +95,10 @@
             <br>
             <h4>{{ story.author }}</h4>
             <div class="a">
-                <div class="c" id="likes" onclick="httpPutLikes_DislikesStory('http://localhost:8000/api/story/' + {{ story.id }},{{ story.id }}, true)">
+                <div class="c" id="likes1" onclick="httpPutLikes_DislikesStory({{ story.id }},0)">
             <p>Likes: {{ story.likes }}</p>
                 </div>
-                <div class="c" id="dislikes" onclick="httpPutLikes_DislikesStory('http://localhost:8000/api/story/' + {{ story.id }},{{ story.id }}, false)">
+                <div class="c" id="dislikes1" onclick="httpPutLikes_DislikesStory({{ story.id }},1)">
             <p>Dislikes: {{ story.dislikes }}</p>
                 </div>
             </div>
@@ -78,10 +110,10 @@
     <div class="story comment">
         <p>{{ comment.text }}</p>
         <div class="a">
-            <div class="c" id="likes" onclick="httpPutLikes_DislikesComment('http://localhost:8000/api/comment/' + {{ comment.id }},{{ comment.id }}, true)">
+            <div class="c" id="likes2" onclick="httpPutLikes_DislikesComment({{ comment.id }},0)">
         <p>Likes: {{ comment.likes }}</p>
             </div>
-                <div class="c" id="likes" onclick="httpPutLikes_DislikesComment('http://localhost:8000/api/comment/' + {{ comment.id }},{{ comment.id }}, false)">
+                <div class="c" id="dislikes2" onclick="httpPutLikes_DislikesComment({{ comment.id }},1)">
         <p>Dislikes: {{ comment.dislikes }}</p>
                 </div>
         </div>
@@ -100,65 +132,7 @@
         <li>Your controller at <code><a href="{{ 'D:/Symfony/UEK-295/src/Controller/HtmlController.php'|file_link(0) }}">src/Controller/HtmlController.php</a></code></li>
         <li>Your template at <code><a href="{{ 'D:/Symfony/UEK-295/templates/html/index.html.twig'|file_link(0) }}">templates/html/index.html.twig</a></code></li>
     </ul>
-<script>
-    function httpPutLikes_DislikesComment(theUrl,verify_id,LorD)
-    {
-        {% for story in storys%}
-        {% for comment in story.comments %}
-        if ({{ comment.id }} == verify_id){
-            Likes = {{ comment.Likes }};
-            Dislikes = {{ comment.Dislikes }};
-            if(LorD){
-                Likes++
-            }
-            else{
-                Dislikes++
-            }
-        const xmlHttp = new XMLHttpRequest();
-        xmlHttp.open( "PUT", theUrl, true ); // false for synchronous request
-        xmlHttp.setRequestHeader('Content-Type', 'application/json')
-        xmlHttp.send(JSON.stringify({
-            "text": "{{ comment.text }}",
-            "likes": Likes,
-            "dislikes": Dislikes
-        }));
-        location.reload();
-        return xmlHttp.responseText;
-        }
-        {% endfor %}
-        {% endfor %}
-    }
 
-    function httpPutLikes_DislikesStory(theUrl,verify_id,LorD)
-    {
-        {% for story in storys%}
-        if ({{ story.id }} == verify_id){
-        Likes = {{ story.Likes }};
-        Dislikes = {{ story.Dislikes }};
-        if(LorD){
-            Likes++
-        }
-        else{
-            Dislikes++
-        }
-        const xmlHttp = new XMLHttpRequest();
-        xmlHttp.open( "PUT", theUrl, true ); // false for synchronous request
-        xmlHttp.setRequestHeader('Content-Type', 'application/json')
-        xmlHttp.send(JSON.stringify({
-            "title": "{{ story.title }}",
-            "storie": "{{ story.storie }}",
-            "likes": Likes,
-            "dislikes": Dislikes,
-            "author": ""
-        }));
-        location.reload();
-        return xmlHttp.responseText;
-        }
-        {% endfor %}
-    }
-
-
-</script>
 </div>
 {% endblock %}
 

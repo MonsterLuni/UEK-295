@@ -7,11 +7,11 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 class CreateUpdateStory
 {
-    #[Groups(["create","update"])]
-    #[Assert\NotBlank(message: "Titel darf nicht leer sein.",groups: ["create", "update"])]
+    #[Groups(["create"])]
+    #[Assert\NotBlank(message: "Titel darf nicht leer sein.",groups: ["create"])]
     public ?string $title = null;
     #[Groups(["create","update"])]
-    #[Assert\NotBlank(message: "Story darf nicht leer sein.",groups: ["create", "update"])]
+    #[Assert\NotBlank(message: "Story darf nicht leer sein.",groups: ["create"])]
     public ?string $storie = null;
     #[Groups(["update"])]
     #[Assert\PositiveOrZero(message: "Die Anzahl Likes muss Positiv sein", groups: ["update","create"])]

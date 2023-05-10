@@ -102,9 +102,17 @@ class CommentController extends AbstractController
         $errorResponse = $this->validateDTO($dto, ["update"]);
         if($errorResponse){return $errorResponse;}
 
-        $entitystory->setText($dto->text);
-        $entitystory->setLikes($dto->likes);
-        $entitystory->setDislikes($dto->dislikes);
+        if ($dto->text == null){
+            if($dto->likes == 0){
+                $entitystory->setLikes($entitystory->getLikes()+1);
+            }
+            else{
+                $entitystory->setDislikes($entitystory->getDislikes()+1);
+            }
+        }
+        else{
+            $entitystory->setText($dto->text);
+        }
 
         $this->repository->save($entitystory, true);
         return $this->json("Comment with ID " . $id . " Succesfully Changed");

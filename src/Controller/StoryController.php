@@ -196,11 +196,20 @@ class StoryController extends AbstractFOSRestController
         //Zum Validieren vom $dto in der Datei CreateUpdateStory.php (bezieht sich auf Function validateDTO)
         $errorResponse = $this->validateDTO($dto, ["update"]);
         if($errorResponse){return $errorResponse;}
+        if ($dto->title == null){
+            if($dto->likes == 0){
+                $entitystory->setLikes($entitystory->getLikes()+1);
+            }
+            else{
+                $entitystory->setDislikes($entitystory->getDislikes()+1);
+            }
+        }
+        else{
+            $entitystory->setTitle($dto->title);
+            $entitystory->setstorie($dto->storie);
+        }
 
-        $entitystory->setTitle($dto->title);
-        $entitystory->setstorie($dto->storie);
-        $entitystory->setLikes($dto->likes);
-        $entitystory->setDislikes($dto->dislikes);
+
         //Checkt ob im Author etwas drin ist, wenn nicht ändert es ihn nicht (unnötig deswegen auskommentiert)
         //if($dto->author){
         //   $entitystory->setAuthor($dto->author);
