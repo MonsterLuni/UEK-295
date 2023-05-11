@@ -45,8 +45,8 @@ class StoryRepository extends ServiceEntityRepository
         $this->logger->info("Filtermethode für Story wurde aufgerufen");
         $qb = $this->createQueryBuilder("b");
         if(!($dtoFilter->likes == 0 && $dtoFilter->dislikes == 0)){
-            $this->logger->info("Filter Like: {like}", ["like" => $dtoFilter->likes]);
-            $this->logger->info("Filter Dislike: {dislike}", ["dislike" => $dtoFilter->dislikes]);
+            $this->logger->debug("Filter Like: {like}", ["like" => $dtoFilter->likes]);
+            $this->logger->debug("Filter Dislike: {dislike}", ["dislike" => $dtoFilter->dislikes]);
             if(!($dtoFilter->likes == 0)){
                 $qb = $qb->andWhere("b.likes >= :likes")
                     ->setParameter("likes", $dtoFilter->likes);
@@ -65,7 +65,7 @@ class StoryRepository extends ServiceEntityRepository
         Diese kann man dann einfach mitgeben beim Request Body
         */
         if($dtoFilter?->orderby){
-            $this->logger->info("OrderBy: {orderby}", ["orderby" => $dtoFilter->orderby]);
+            $this->logger->debug("OrderBy: {orderby}", ["orderby" => $dtoFilter->orderby]);
             $qb->orderBy($dtoFilter->orderby,$dtoFilter->orderdirection ?? "ASC");
         }
             return $qb

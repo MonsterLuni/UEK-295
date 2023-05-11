@@ -20,6 +20,7 @@ use OpenApi\Attributes\Post;
 use OpenApi\Attributes\Put;
 use OpenApi\Attributes\RequestBody;
 use OpenApi\Attributes\Response;
+use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
@@ -35,7 +36,8 @@ class StoryController extends AbstractFOSRestController
     public function __construct(private SerializerInterface $serializer,
                                 private StoryRepository $repository,
                                 private ShowStoryMapper $mapper,
-                                private ValidatorInterface $validator){}
+                                private ValidatorInterface $validator,
+                                private LoggerInterface $logger){}
 
     /**
      * Validates a dto
@@ -45,6 +47,7 @@ class StoryController extends AbstractFOSRestController
      */
     private function validateDTO($dto, $groups = ["create"])
     {
+        $this->logger->info("Validate Methode für Story wurde aufgerufen");
         $errors = $this->validator->validate($dto, groups: $groups);
 
         if ($errors->count() > 0) {
@@ -52,8 +55,11 @@ class StoryController extends AbstractFOSRestController
             foreach ($errors as $error) {
                 $errorStringArray[] = $error->getMessage();
             }
+            $this->logger->info("Filtermethode für Story hat {errors} Fehler gefunden", ['errors' => $errors->count()]);
+            $this->logger->debug("Die Fehler sind: {fehler}", ['fehler' => $errorStringArray]);
             return $this->json($errorStringArray, status: 400);
         }
+        $this->logger->info("Filtermethode für Story hat keine Fehler entdeckt");
         return null;
     }
     /**
