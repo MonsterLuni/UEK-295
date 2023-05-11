@@ -7,6 +7,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 class CreateUpdateComment
 {
+    //TODO: Check if all the Groupes make sense
     #[Assert\NotBlank(message: "Es muss eine Referenzstory angegeben werden", groups: ["create"])]
     #[Assert\Blank(message: "Die Referenzstory darf nicht verändert werden", groups: ["update"])]
     #[StoryDoesExist(groups: ["create"])]

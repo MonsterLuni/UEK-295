@@ -25,6 +25,9 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
+/**
+ * For POST with the Entity Story
+ */
 #[Route("/api", name: "api_")]
 class StoryController extends AbstractFOSRestController
 {
@@ -40,19 +43,19 @@ class StoryController extends AbstractFOSRestController
      * @param string[] $groups. Used to choose which Validation should be used.
      * @return JsonResponse returns an array of error messages (can be empty)
      */
-    private function validateDTO($dto, $groups = ["create"]){
+    private function validateDTO($dto, $groups = ["create"])
+    {
         $errors = $this->validator->validate($dto, groups: $groups);
 
-        if($errors->count() > 0){
+        if ($errors->count() > 0) {
             $errorStringArray = [];
-            foreach($errors as $error){
+            foreach ($errors as $error) {
                 $errorStringArray[] = $error->getMessage();
             }
             return $this->json($errorStringArray, status: 400);
         }
         return null;
     }
-
     /**
      * Shows all Storys and the related comments that correspond to the Filters set
      * @param Request $request. allows to set Filters (available Filters are Likes,Dislikes and Author)
@@ -104,7 +107,7 @@ class StoryController extends AbstractFOSRestController
     }
 
     /**
-     * To Create a new Entry in the Database.
+     * To Create a new Story.
      * @param Request $request. Used to set the specific values of Title,Storie,Author,Likes and Dislikes
      * @return JsonResponse. Returns the newly created entry.
      */
@@ -155,7 +158,7 @@ class StoryController extends AbstractFOSRestController
     }
 
     /**
-     * To Delete an Entry
+     * To Delete a Story
      * @param $id. to specify which entry should be deleted
      * @return JsonResponse. Says if the Deletion was successful or not
      */
@@ -185,7 +188,7 @@ class StoryController extends AbstractFOSRestController
     }
 
     /**
-     * To Change an already Existing Entry
+     * To Change a Story
      * @param Request $request. You can Change Title, Storie.
      * @param $id. To Choose witch Entry you would like to change.
      * @return JsonResponse. Returns the Updated Entry.

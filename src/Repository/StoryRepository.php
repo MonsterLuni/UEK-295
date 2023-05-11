@@ -6,6 +6,7 @@ use App\DTO\FilterStory;
 use App\Entity\Story;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
+use Psr\Log\LoggerInterface;
 
 /**
  * @extends ServiceEntityRepository<Story>
@@ -17,7 +18,7 @@ use Doctrine\Persistence\ManagerRegistry;
  */
 class StoryRepository extends ServiceEntityRepository
 {
-    public function __construct(ManagerRegistry $registry)
+    public function __construct(ManagerRegistry $registry, private LoggerInterface $logger)
     {
         parent::__construct($registry, Story::class);
     }
@@ -41,8 +42,11 @@ class StoryRepository extends ServiceEntityRepository
     }
 
     public function filterAll(FilterStory $dtoFilter){
+        $this->logger->info("Filtermethode für Story wurde aufgerufen");
         $qb = $this->createQueryBuilder("b");
         if(!($dtoFilter->likes == 0 && $dtoFilter->dislikes == 0)){
+            $this->logger->debug("Filter Like: {like}", ["like" => $dtoFilter->likes]);
+            $this->logger->debug("Filter Dislike: {dislike}", ["dislike" => $dtoFilter->dislikes]);
             if(!($dtoFilter->likes == 0)){
                 $qb = $qb->andWhere("b.likes >= :likes")
                     ->setParameter("likes", $dtoFilter->likes);
@@ -55,6 +59,13 @@ class StoryRepository extends ServiceEntityRepository
         if($dtoFilter->author){
             $qb = $qb->andWhere("b.author like :author")
                 ->setParameter("author", $dtoFilter->author."%");
+        }
+        /*
+        wir haben bei FilterStory.php noch weitere variabeln hinzugefügt, sodass wir sie hier benutzen können.
+        Diese kann man dann einfach mitgeben beim Request Body
+        */
+        if($dtoFilter?->orderby){
+            $qb->orderBy($dtoFilter->orderby,$dtoFilter->orderdirection ?? "ASC");
         }
             return $qb
                 ->getQuery()

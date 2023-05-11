@@ -6,7 +6,6 @@ use App\DTO\CreateUpdateComment;
 use App\DTO\FilterStory;
 use App\DTO\Mapper\ShowCommentMapper;
 use App\DTO\ShowComment;
-use App\DTO\ShowStory;
 use App\Entity\Comments;
 use App\Repository\CommentsRepository;
 use App\Repository\StoryRepository;

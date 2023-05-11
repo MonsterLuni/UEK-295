@@ -7,6 +7,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 class CreateUpdateStory
 {
+    //TODO: Check if all the Groupes make sense
     #[Groups(["create"])]
     #[Assert\NotBlank(message: "Titel darf nicht leer sein.",groups: ["create"])]
     public ?string $title = null;
