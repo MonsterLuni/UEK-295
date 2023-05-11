@@ -3,13 +3,23 @@
 namespace App\Controller;
 
 use App\DTO\CreateUpdateComment;
-use App\DTO\CreateUpdateStory;
+use App\DTO\FilterStory;
 use App\DTO\Mapper\ShowCommentMapper;
+use App\DTO\ShowComment;
+use App\DTO\ShowStory;
 use App\Entity\Comments;
-use App\Entity\Story;
 use App\Repository\CommentsRepository;
 use App\Repository\StoryRepository;
 use JMS\Serializer\SerializerInterface;
+use Nelmio\ApiDocBundle\Annotation\Model;
+use OpenApi\Attributes\Delete;
+use OpenApi\Attributes\Get;
+use OpenApi\Attributes\Items;
+use OpenApi\Attributes\JsonContent;
+use OpenApi\Attributes\Post;
+use OpenApi\Attributes\Put;
+use OpenApi\Attributes\RequestBody;
+use OpenApi\Attributes\Response;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -39,8 +49,31 @@ class CommentController extends AbstractController
         return null;
     }
 
+    /**
+     * Shows all Comments
+     * @return JsonResponse. Returns all Comments there are
+     */
+    #[Get(
+        requestBody: new RequestBody(
+        content: new JsonContent(
+            ref: new Model(
+                type: FilterStory::class
+            )
+        )
+    ))]
+    #[Response(
+        response: 200,
+        description: "Gives out Every Comment there is.",
+        content: new JsonContent(
+            type: 'array',
+            items: new Items(
+                ref: new Model(
+                    type: ShowComment::class)
+            )
+        )
+    )]
     #[Rest\Get('/comment', name: 'app_comment_get')]
-    public function comment_get(Request $request): JsonResponse
+    public function comment_get(): JsonResponse
     {
         $comment = $this->repository->findAll();
 
@@ -51,6 +84,30 @@ class CommentController extends AbstractController
         );
     }
 
+    /**
+     * To create a new Comment
+     * @param Request $request. To declare the Text,Likes,Dislikes of a Comment.
+     * @return JsonResponse. Returns the newly created Comment
+     */
+    #[Post(
+        requestBody: new RequestBody(
+            content: new JsonContent(
+                ref: new Model(
+                    type: FilterStory::class
+                )
+            )
+        ))]
+    #[Response(
+        response: 200,
+        description: "Gives out the newly created Comment",
+        content: new JsonContent(
+            type: 'array',
+            items: new Items(
+                ref: new Model(
+                    type: ShowComment::class)
+            )
+        )
+    )]
     #[Rest\Post('/comment', name: 'app_comment_create')]
     public function comment_create(Request $request, StoryRepository $storyrepository): JsonResponse
     {
@@ -78,8 +135,27 @@ class CommentController extends AbstractController
         );
     }
 
+    /**
+     * To Delete a Comment
+     * @param $id. To find the Specific entry that is searched for
+     * @return JsonResponse. Returns a Message if the Deletion was Succesful or not
+     */
+    #[Delete(
+        description: "ID in the url is used to find an Entry"
+    )]
+    #[Response(
+        response: 200,
+        description: "Gives out a Message if the Deletion was Successful or not",
+        content: new JsonContent(
+            type: 'array',
+            items: new Items(
+                ref: new Model(
+                    type: JsonResponse::class)
+            )
+        )
+    )]
     #[Rest\Delete('/comment/{id}', name: 'app_comment_delete')]
-    public function comment_delete(Request $request, $id): JsonResponse
+    public function comment_delete($id): JsonResponse
     {
         $entitystory = $this->repository->find($id);
         if(!$entitystory) {
@@ -89,6 +165,26 @@ class CommentController extends AbstractController
         return $this->json("Comment with ID " . $id . " Succesfully Deleted");
     }
 
+    /**
+     * To Change a Comment
+     * @param Request $request. To give Text a new Value
+     * @param $id. To find the exact Entry that is wanted
+     * @return JsonResponse
+     */
+    #[Put(
+        description: "ID in the url is used to find an Entry"
+    )]
+    #[Response(
+        response: 200,
+        description: "Gives out a Message if the Change was Successful or not",
+        content: new JsonContent(
+            type: 'array',
+            items: new Items(
+                ref: new Model(
+                    type: JsonResponse::class)
+            )
+        )
+    )]
     #[Rest\Put('/comment/{id}', name: 'app_comment_update')]
     public function comment_update(Request $request, $id): JsonResponse
     {

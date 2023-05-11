@@ -35,8 +35,9 @@ class StoryController extends AbstractFOSRestController
                                 private ValidatorInterface $validator){}
 
     /**
-     * Validates stuff
+     * Validates a dto
      * @param $dto. the dto gets validated.
+     * @param string[] $groups. Used to choose which Validation should be used.
      * @return JsonResponse returns an array of error messages (can be empty)
      */
     private function validateDTO($dto, $groups = ["create"]){
@@ -51,6 +52,12 @@ class StoryController extends AbstractFOSRestController
         }
         return null;
     }
+
+    /**
+     * Shows all Storys and the related comments that correspond to the Filters set
+     * @param Request $request. allows to set Filters (available Filters are Likes,Dislikes and Author)
+     * @return JsonResponse Returns all Storys + comments that have been found with the Filter
+     */
     #[Get(requestBody: new RequestBody(
         content: new JsonContent(
             ref: new Model(
@@ -60,7 +67,7 @@ class StoryController extends AbstractFOSRestController
     ))]
     #[Response(
         response: 200,
-        description: "When you want to see every Story or don't want to filter anything, you can just keep the Request-Body empty",
+        description: "Can give out every Story. When you want to see every Story or don't want to filter anything, you can just keep the Request-Body empty",
         content: new JsonContent(
             type: 'array',
             items: new Items(
@@ -95,6 +102,12 @@ class StoryController extends AbstractFOSRestController
             }
 
     }
+
+    /**
+     * To Create a new Entry in the Database.
+     * @param Request $request. Used to set the specific values of Title,Storie,Author,Likes and Dislikes
+     * @return JsonResponse. Returns the newly created entry.
+     */
     #[Post(
         requestBody: new RequestBody(
             content: new JsonContent(
@@ -140,20 +153,28 @@ class StoryController extends AbstractFOSRestController
             $this->serializer->serialize($this->mapper->mapEntityToDTO($entity),"json")
         );
     }
-    #[Delete]
+
+    /**
+     * To Delete an Entry
+     * @param $id. to specify which entry should be deleted
+     * @return JsonResponse. Says if the Deletion was successful or not
+     */
+    #[Delete(
+        description: "To Delete an Entry via ID in url"
+    )]
     #[Response(
         response: 200,
-        description: "When you enter an ID that's valid, you will se the Entity that you just deleted.",
+        description: "You will see an Response Message if the Story with id (id) was successfully deleted or not.",
         content: new JsonContent(
             type: 'array',
             items: new Items(
                 ref: new Model(
-                    type: ShowStory::class)
+                    type: JsonResponse::class)
             )
         )
     )]
     #[Rest\Delete('/story/{id}', name: 'app_story_delete')]
-    public function story_delete(Request $request, $id): JsonResponse
+    public function story_delete($id): JsonResponse
     {
         $entitystory = $this->repository->find($id);
         if(!$entitystory) {
@@ -162,7 +183,15 @@ class StoryController extends AbstractFOSRestController
         $this->repository->remove($entitystory, true);
         return $this->json("Story with ID " . $id . " Succesfully Deleted");
     }
+
+    /**
+     * To Change an already Existing Entry
+     * @param Request $request. You can Change Title, Storie.
+     * @param $id. To Choose witch Entry you would like to change.
+     * @return JsonResponse. Returns the Updated Entry.
+     */
     #[Put(
+        description: "To Change the Title,Storie of an Entry via the ID in the url",
         requestBody: new RequestBody(
             content: new JsonContent(
                 ref: new Model(
@@ -197,7 +226,7 @@ class StoryController extends AbstractFOSRestController
         $errorResponse = $this->validateDTO($dto, ["update"]);
         if($errorResponse){return $errorResponse;}
         if ($dto->title == null){
-            if($dto->likes == 0){
+            if($dto->likes == 0 && $dto->dislikes == 0){
                 $entitystory->setLikes($entitystory->getLikes()+1);
             }
             else{
