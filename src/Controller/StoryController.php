@@ -88,6 +88,7 @@ class StoryController extends AbstractFOSRestController
     #[Rest\Get('/story', name: 'app_story_get')]
     public function story_get(Request $request): JsonResponse
     {
+        $this->logger->info("GET Methode für Story wurde aufgerufen");
         $dtoFilter = null;
 
         try {
@@ -141,6 +142,7 @@ class StoryController extends AbstractFOSRestController
     #[Rest\Post('/story', name: 'app_story_create')]
     public function story_create(Request $request): JsonResponse
     {
+        $this->logger->info("POST Methode für Story wurde aufgerufen");
         //Deserializiert den Requestbody im Typ der Klasse CreateUpdateStory, welches im Format "json" ist. Dies speichert es dann in eine VAriable die $dto heisst
         $dto = $this->serializer->deserialize($request->getContent(), CreateUpdateStory::class, "json");
 
@@ -185,6 +187,7 @@ class StoryController extends AbstractFOSRestController
     #[Rest\Delete('/story/{id}', name: 'app_story_delete')]
     public function story_delete($id): JsonResponse
     {
+        $this->logger->info("DELETE Methode für Story wurde aufgerufen");
         $entitystory = $this->repository->find($id);
         if(!$entitystory) {
             return $this->json("Story with ID {$id} does not exist!", status: 403);
@@ -224,6 +227,7 @@ class StoryController extends AbstractFOSRestController
     #[Rest\Put('/story/{id}', name: 'app_story_update')]
     public function story_update(Request $request, $id): JsonResponse
     {
+        $this->logger->info("PUT Methode für Story wurde aufgerufen");
         $dto = $this->serializer->deserialize($request->getContent(), CreateUpdateStory::class, "json");
         $entitystory = $this->repository->find($id);
 
