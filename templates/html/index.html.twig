@@ -12,6 +12,7 @@
                 "likes": LikeOrDislike,
                 "dislikes": 0
             }));
+            location.reload();
             return xmlHttp.responseText;
         }
 
@@ -25,6 +26,7 @@
                 "likes": LikeOrDislike,
                 "dislikes": 0
             }));
+            location.reload();
             return xmlHttp.responseText;
         }
     </script>
@@ -104,11 +106,18 @@
     <div id="filter">
         <h2>Filter</h2>
         <p>Author:</p>
-        <input placeholder="Luca Moser" maxlength="50" >
+        <form action="./home" method="GET">
+        <input placeholder="Luca Moser" maxlength="50" type="text" name="author">
         <p>Min Likes:</p>
-        <input placeholder="78" maxlength="50" >
+        <input placeholder="64" maxlength="50" type="text" name="likes">
         <p>Min Dislikes:</p>
-        <input placeholder="42" maxlength="50" >
+        <input placeholder="42" maxlength="50" type="text" name="dislikes">
+            <p>SortBy:</p>
+            <input placeholder="b.likes" maxlength="50" type="text" name="sortby">
+        <p>SortDirection:</p>
+        <input placeholder="42" maxlength="50" type="checkbox" name="sortdirection">
+            <input type="submit">
+        </form>
     </div>
 
     <h2>Storys:</h2>
