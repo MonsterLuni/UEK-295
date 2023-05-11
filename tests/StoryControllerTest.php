@@ -28,9 +28,12 @@ class StoryControllerTest extends WebTestCase
         self::$application->run(new StringInput("doctrine:database:create --quiet"));
         self::$application->run(new StringInput("doctrine:schema:create"));
         self::$application->run(new StringInput("doctrine:fixtures:load"));
-
     }
     //erkennt es dadurch, dass es mit test anfängt
+    public function testGet(){
+        $request = self::$client->request("GET","/api/story");
+        $this->assertTrue($request->getStatusCode() == 200);
+    }
     public function testPost(){
         $dto = new CreateUpdateStory();
         $dto->title = "";
@@ -68,6 +71,18 @@ class StoryControllerTest extends WebTestCase
         $this->assertTrue($response->getStatusCode() == 400);
         $this->assertContains("Titel darf nicht leer sein.",$responseBody);
 
+    }
+
+    public function testDelete(){
+        $id = 1;
+
+        $request = self::$client->request("DELETE","api/story/6");
+
+        $responseBody = json_decode($request->getBody());
+
+        dump($responseBody);
+
+        $this->assertContains("Story with ID 6 Succesfully Deleted", $responseBody);
     }
 
     public function testSomething(): void
