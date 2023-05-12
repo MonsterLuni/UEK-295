@@ -66,7 +66,7 @@ class StoryRepository extends ServiceEntityRepository
         */
         if($dtoFilter?->orderby){
             $this->logger->debug("OrderBy: {orderby}", ["orderby" => $dtoFilter->orderby]);
-            $qb->orderBy($dtoFilter->orderby,$dtoFilter->orderdirection ?? "ASC");
+            $qb->orderBy("b." . $dtoFilter->orderby,$dtoFilter->orderdirection ?? "ASC");
         }
             return $qb
                 ->getQuery()

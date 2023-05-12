@@ -24,7 +24,7 @@ class HtmlController extends AbstractController
              $filter->author = $request->get("author");
              $filter->likes = intval($request->get("likes"));
              $filter->dislikes = intval($request->get("dislikes"));
-             if(!($request->get("sortby") == null)){
+             if($request->get("sortby") != null){
                  $filter->orderby = $request->get("sortby");
                  if($request->get("sortdirection") == "on"){
                      $filter->orderdirection = "DESC";
@@ -38,11 +38,20 @@ class HtmlController extends AbstractController
             $dtoFilter = new FilterStory();
         }
         $kommentar = $repository->filterAll($filter);
-
-        return $this->render('html/index.html.twig', [
-            'storys' => $kommentar,
-            'user_name' => $name,
-        ]);
+        if($kommentar == null){
+            return $this->render('html/index.html.twig', [
+                'message' => "Es wurden keine Storys mit diesem Filter gefunden",
+                'storys' => $kommentar,
+                'user_name' => $name,
+            ]);
+        }
+        else{
+            return $this->render('html/index.html.twig', [
+                'message' => "Es wurden " . count($kommentar) . " Storys gefunden",
+                'storys' => $kommentar,
+                'user_name' => $name,
+            ]);
+        }
     }
 
     #[Rest\Get('/login', name: 'twig_html')]

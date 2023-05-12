@@ -84,11 +84,14 @@
         background-color: black;
         color: white;
         width: 10vw;
+        height: 2vh;
+        border-style: none;
+        border-radius: 5px;
     }
 
     #filter{
-        height: 40vh;
-        width: 40vw;
+        height: auto;
+        width: 70%;
         border-radius: 20px;
         background-color: #222222;
         margin-bottom: 5vh;
@@ -97,6 +100,7 @@
         flex-direction: column;
         align-content: center;
         text-align: center;
+        padding-bottom: 5vh;
     }
 </style>
 
@@ -113,10 +117,12 @@
         <p>Min Dislikes:</p>
         <input placeholder="42" maxlength="50" type="text" name="dislikes">
             <p>SortBy:</p>
-            <input placeholder="b.likes" maxlength="50" type="text" name="sortby">
-        <p>SortDirection:</p>
+            <input placeholder="likes" maxlength="50" type="text" name="sortby">
+        <p>SortDirection: default(ASC)</p>
         <input placeholder="42" maxlength="50" type="checkbox" name="sortdirection">
-            <input type="submit">
+            <p>SUCHEN</p>
+            <input type="submit" value="DRÜCK MICH">
+            <h3>{{ message }}</h3>
         </form>
     </div>
 
@@ -160,6 +166,7 @@
             <br>
         <br>
     {% endfor %}
+    <br>
     This friendly message is coming from:
     <ul>
         <li>Your controller at <code><a href="{{ 'D:/Symfony/UEK-295/src/Controller/HtmlController.php'|file_link(0) }}">src/Controller/HtmlController.php</a></code></li>
