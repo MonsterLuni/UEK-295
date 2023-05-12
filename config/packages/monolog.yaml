@@ -4,7 +4,7 @@ monolog:
             type: fingers_crossed
             action_level: info
             handler: file_log
-            channels: [app]
+            #channels: [app]
         file_log:
             type: rotating_file
             path: '%kernel.logs_dir%/%kernel.environment%.log'

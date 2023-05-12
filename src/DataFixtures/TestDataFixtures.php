@@ -5,9 +5,10 @@ namespace App\DataFixtures;
 use App\Entity\Comments;
 use App\Entity\Story;
 use Doctrine\Bundle\FixturesBundle\Fixture;
+use Doctrine\Bundle\FixturesBundle\FixtureGroupInterface;
 use Doctrine\Persistence\ObjectManager;
 
-class TestDataFixtures extends Fixture
+class TestDataFixtures extends Fixture implements FixtureGroupInterface
 {
     public function load(ObjectManager $manager): void
     {
@@ -27,5 +28,10 @@ class TestDataFixtures extends Fixture
         // $manager->persist($product);
 
         $manager->flush();
+    }
+
+    public static function getGroups(): array
+    {
+        return ["notfakedata"];
     }
 }

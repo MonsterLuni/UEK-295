@@ -3,6 +3,7 @@
 namespace App\Tests;
 
 use App\DTO\CreateUpdateStory;
+use App\Entity\Story;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\ClientException;
 use Symfony\Bundle\FrameworkBundle\Console\Application;
@@ -27,11 +28,11 @@ class StoryControllerTest extends WebTestCase
         self::$application->run(new StringInput("doctrine:database:drop --if-exists --force"));
         self::$application->run(new StringInput("doctrine:database:create --quiet"));
         self::$application->run(new StringInput("doctrine:schema:create"));
-        self::$application->run(new StringInput("doctrine:fixtures:load"));
+        self::$application->run(new StringInput("doctrine:fixtures:load --group=fakedata"));
     }
     //erkennt es dadurch, dass es mit test anfängt
     public function testGet(){
-        $request = self::$client->request("GET","/api/story");
+        $request = self::$client->request("GET","/index_test.php/api/story");
         $this->assertTrue($request->getStatusCode() == 200);
     }
     public function testPost(){
@@ -39,26 +40,10 @@ class StoryControllerTest extends WebTestCase
         $dto->title = "";
         $dto->author = "Luca Moser";
         $dto->storie = "Die mutter ist Schlimm";
-        /*
-        //$this->expectException(ClientException::class);
-
-        //build request for post method
-        $request = self::$client->request("POST","/api/story",[
-            "body" => json_encode($dto)
-        ]);
-
-        //get response for post method
-        $response = json_decode($request->getBody());
-
-        //assert methods for actual test case
-        $this->assertTrue($request->getStatusCode() == 200);
-        $this->assertTrue($response->author == "Luca Moser");
-        */
-
 
         $response = null;
         try {
-            $request = self::$client->request("POST","/api/story",[
+            $request = self::$client->request("POST","/index_test.php/api/story",[
                 "body" => json_encode($dto)
             ]);
         }
@@ -74,19 +59,23 @@ class StoryControllerTest extends WebTestCase
     }
 
     public function testDelete(){
-        $id = 1;
-
-        $request = self::$client->request("DELETE","api/story/6");
+        $request = self::$client->request("DELETE","/index_test.php/api/story/1");
 
         $responseBody = json_decode($request->getBody());
 
-        dump($responseBody);
-
-        $this->assertContains("Story with ID 6 Succesfully Deleted", $responseBody);
+        $this->assertTrue($responseBody == "Story with ID 1 Succesfully Deleted");
     }
+    public function testUpdate(){
+        $dto = new Story();
+        $dto->setTitle("NeuerTitel");
+        $dto->setstorie("NeueStorie");
 
-    public function testSomething(): void
-    {
-        $this->assertTrue(true);
+        $request = self::$client->request("PUT", "/index_test.php/api/story/2",[
+            "body" => json_encode($dto)
+        ]);
+
+        $response = json_decode($request->getBody());
+
+        $this->assertTrue($response == "Story with ID 2 Succesfully Changed");
     }
 }

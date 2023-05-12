@@ -18,10 +18,10 @@ class Comments
 
 
     #[ORM\Column(nullable: true)]
-    private ?int $likes = null;
+    private ?int $likes = 0;
 
     #[ORM\Column(nullable: true)]
-    private ?int $dislikes = null;
+    private ?int $dislikes = 0;
 
     #[ORM\ManyToOne(inversedBy: 'story')]
     #[ORM\JoinColumn(nullable: false)]

@@ -8,8 +8,8 @@ class ShowComment
 
     public ?string $text = null;
 
-    public ?int $likes = null;
+    public ?int $likes = 0;
 
-    public ?int $dislikes = null;
+    public ?int $dislikes = 0;
 
 }

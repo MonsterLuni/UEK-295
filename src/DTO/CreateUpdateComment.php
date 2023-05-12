@@ -16,7 +16,7 @@ class CreateUpdateComment
     #[Assert\NotBlank(message: "Es muss ein Text angegeben werden", groups: ["create"])]
     public ?string $text = null;
     #[Assert\PositiveOrZero(message: "Die anzahl Likes muss Positiv sein", groups: ["create","update"])]
-    public ?int $likes = null;
+    public ?int $likes = 0;
     #[Assert\PositiveOrZero(message: "Die anzahl Dislikes muss Positiv sein", groups: ["create","update"])]
-    public ?int $dislikes = null;
+    public ?int $dislikes = 0;
 }
