@@ -45,7 +45,7 @@ security:
         - { path: ^/api/story, roles: ROLE_ADMIN }
         - { path: ^/api/comment, roles: ROLE_USER, methods: [GET] }
         - { path: ^/api/comment, roles: ROLE_ADMIN }
-        - { path: ^/ArchiveOfMyself/home, roles: ROLE_ADMIN, methods: [GET]}
+        - { path: ^/ArchiveOfMyself, roles: PUBLIC_ACCESS}
 
 
 when@test:
