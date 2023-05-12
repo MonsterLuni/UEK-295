@@ -61,7 +61,7 @@ class HtmlController extends AbstractController
 
         $kommentar = $repository->findAll();
 
-        return $this->render('html/index.html.twig', [
+        return $this->render('html/login.html.twig', [
             'storys' => $kommentar,
             'user_name' => $name,
         ]);
