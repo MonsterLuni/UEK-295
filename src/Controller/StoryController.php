@@ -60,7 +60,7 @@ class StoryController extends AbstractFOSRestController
             return $this->json($errorStringArray, status: 400);
         }
         $this->logger->info("Filtermethode für Story hat keine Fehler entdeckt");
-        return null;
+        return $this->json("FilterMethode hat keine Fehler entdeckt");
     }
     /**
      * Shows all Storys and the related comments that correspond to the Filters set
