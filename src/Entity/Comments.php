@@ -16,7 +16,6 @@ class Comments
     #[ORM\Column(length: 255)]
     private ?string $text = null;
 
-
     #[ORM\Column(nullable: true)]
     private ?int $likes = 0;
 
@@ -67,8 +66,6 @@ class Comments
 
         return $this;
     }
-
-
 
     public function getRefstory(): ?Story
     {

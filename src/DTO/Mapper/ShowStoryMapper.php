@@ -6,7 +6,7 @@ use App\DTO\ShowStory;
 
 class ShowStoryMapper extends BaseMapper
 {
-    public function mapEntityToDTO(object $entity) : object
+    public function mapEntityToDTO(object $entity): object
     {
         $mapper = new ShowCommentMapper();
 
@@ -20,6 +20,5 @@ class ShowStoryMapper extends BaseMapper
         $dto->comments = $mapper->mapEntitiesToDTOS($entity->getComments());
 
         return $dto;
-
     }
 }

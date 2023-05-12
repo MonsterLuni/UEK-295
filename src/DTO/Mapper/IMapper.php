@@ -6,5 +6,5 @@ interface IMapper
 {
     public function mapEntityToDTO(object $entity);
 
-    public function mapEntitiesToDTOs(iterable $entities) : iterable;
+    public function mapEntitiesToDTOs(iterable $entities): iterable;
 }

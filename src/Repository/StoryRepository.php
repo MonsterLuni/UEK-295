@@ -41,36 +41,38 @@ class StoryRepository extends ServiceEntityRepository
         }
     }
 
-    public function filterAll(FilterStory $dtoFilter){
-        $this->logger->info("Filtermethode für Story wurde aufgerufen");
-        $qb = $this->createQueryBuilder("b");
-        if(!($dtoFilter->likes == 0 && $dtoFilter->dislikes == 0)){
-            $this->logger->debug("Filter Like: {like}", ["like" => $dtoFilter->likes]);
-            $this->logger->debug("Filter Dislike: {dislike}", ["dislike" => $dtoFilter->dislikes]);
-            if(!($dtoFilter->likes == 0)){
-                $qb = $qb->andWhere("b.likes >= :likes")
-                    ->setParameter("likes", $dtoFilter->likes);
+    public function filterAll(FilterStory $dtoFilter)
+    {
+        $this->logger->info('Filtermethode für Story wurde aufgerufen');
+        $qb = $this->createQueryBuilder('b');
+        if (!(0 == $dtoFilter->likes && 0 == $dtoFilter->dislikes)) {
+            $this->logger->debug('Filter Like: {like}', ['like' => $dtoFilter->likes]);
+            $this->logger->debug('Filter Dislike: {dislike}', ['dislike' => $dtoFilter->dislikes]);
+            if (!(0 == $dtoFilter->likes)) {
+                $qb = $qb->andWhere('b.likes >= :likes')
+                    ->setParameter('likes', $dtoFilter->likes);
             }
-            if(!($dtoFilter->dislikes == 0)){
-                $qb = $qb->andWhere("b.dislikes >= :dislikes")
-                    ->setParameter("dislikes", $dtoFilter->dislikes);
+            if (!(0 == $dtoFilter->dislikes)) {
+                $qb = $qb->andWhere('b.dislikes >= :dislikes')
+                    ->setParameter('dislikes', $dtoFilter->dislikes);
             }
         }
-        if($dtoFilter->author){
-            $qb = $qb->andWhere("b.author like :author")
-                ->setParameter("author", $dtoFilter->author."%");
+        if ($dtoFilter->author) {
+            $qb = $qb->andWhere('b.author like :author')
+                ->setParameter('author', $dtoFilter->author.'%');
         }
         /*
         wir haben bei FilterStory.php noch weitere variabeln hinzugefügt, sodass wir sie hier benutzen können.
         Diese kann man dann einfach mitgeben beim Request Body
         */
-        if($dtoFilter?->orderby){
-            $this->logger->debug("OrderBy: {orderby}", ["orderby" => $dtoFilter->orderby]);
-            $qb->orderBy("b." . $dtoFilter->orderby,$dtoFilter->orderdirection ?? "ASC");
+        if ($dtoFilter?->orderby) {
+            $this->logger->debug('OrderBy: {orderby}', ['orderby' => $dtoFilter->orderby]);
+            $qb->orderBy('b.'.$dtoFilter->orderby, $dtoFilter->orderdirection ?? 'ASC');
         }
-            return $qb
-                ->getQuery()
-                ->getResult();
+
+        return $qb
+            ->getQuery()
+            ->getResult();
     }
 
 //    /**

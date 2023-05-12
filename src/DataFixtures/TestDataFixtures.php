@@ -13,15 +13,15 @@ class TestDataFixtures extends Fixture implements FixtureGroupInterface
     public function load(ObjectManager $manager): void
     {
         $story = new Story();
-        $story->setTitle("Hallo");
-        $story->setstorie("Gute Idee");
-        $story->setAuthor("Luca Moser");
+        $story->setTitle('Hallo');
+        $story->setstorie('Gute Idee');
+        $story->setAuthor('Luca Moser');
 
         $manager->persist($story);
 
         $comment = new Comments();
         $comment->setRefstory($story);
-        $comment->setText("Hallo");
+        $comment->setText('Hallo');
         $manager->persist($comment);
 
         // $product = new Product();
@@ -32,6 +32,6 @@ class TestDataFixtures extends Fixture implements FixtureGroupInterface
 
     public static function getGroups(): array
     {
-        return ["notfakedata"];
+        return ['notfakedata'];
     }
 }

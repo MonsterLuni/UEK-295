@@ -11,5 +11,4 @@ class ShowComment
     public ?int $likes = 0;
 
     public ?int $dislikes = 0;
-
 }

@@ -7,13 +7,12 @@ use App\DTO\ShowComment;
 class ShowCommentMapper extends BaseMapper
 {
     /**
-     * Takes
+     * Takes.
+     *
      * @param object $entity. Takes an Entity and maps it to
-     * @return ShowComment
      */
-    public function mapEntityToDTO(object $entity) : ShowComment
+    public function mapEntityToDTO(object $entity): ShowComment
     {
-
         $dto = new ShowComment();
         $dto->refstory = $entity->getrefstory()->getTitle();
         $dto->text = $entity->gettext();

@@ -19,8 +19,8 @@ class ShowStory
     public ?string $author = null;
 
     #[Property(
-        "Comments",
-        type: "array",
+        'Comments',
+        type: 'array',
         items: new Items(
             ref: new Model(
                 type: ShowComment::class
