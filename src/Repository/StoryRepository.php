@@ -5,7 +5,9 @@ namespace App\Repository;
 use App\DTO\FilterStory;
 use App\Entity\Story;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\Query;
 use Doctrine\Persistence\ManagerRegistry;
+use http\Env\Response;
 use Psr\Log\LoggerInterface;
 
 /**
@@ -65,7 +67,7 @@ class StoryRepository extends ServiceEntityRepository
         wir haben bei FilterStory.php noch weitere variabeln hinzugefügt, sodass wir sie hier benutzen können.
         Diese kann man dann einfach mitgeben beim Request Body
         */
-        if ($dtoFilter?->orderby) {
+        if ($dtoFilter->orderby) {
             $this->logger->debug('OrderBy: {orderby}', ['orderby' => $dtoFilter->orderby]);
             $qb->orderBy('b.'.$dtoFilter->orderby, $dtoFilter->orderdirection ?? 'ASC');
         }

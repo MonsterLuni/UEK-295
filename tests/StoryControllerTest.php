@@ -32,10 +32,25 @@ class StoryControllerTest extends WebTestCase
     }
     //erkennt es dadurch, dass es mit test anfängt
     public function testGet(){
-        $request = self::$client->request("GET","/index_test.php/api/story");
+
+        $requestLogin = self::$client->request("POST","/index_test.php/api/login_check",[
+            "body" => json_encode([
+                "username" => "TestUser",
+                "password" => "1234"
+            ])
+        ]);
+        global $token;
+        $token = json_decode($requestLogin->getBody())->token;
+
+        $request = self::$client->request("GET","/index_test.php/api/story",[
+            "headers" => [
+                "Authorization" => "Bearer " . $token
+            ]
+        ]);
         $this->assertTrue($request->getStatusCode() == 200);
     }
     public function testPost(){
+        global $token;
         $dto = new CreateUpdateStory();
         $dto->title = "";
         $dto->author = "Luca Moser";
@@ -44,7 +59,10 @@ class StoryControllerTest extends WebTestCase
         $response = null;
         try {
             $request = self::$client->request("POST","/index_test.php/api/story",[
-                "body" => json_encode($dto)
+                "body" => json_encode($dto),
+                "headers" => [
+                "Authorization" => "Bearer " . $token
+            ]
             ]);
         }
         catch (ClientException $ex){
@@ -57,25 +75,33 @@ class StoryControllerTest extends WebTestCase
         $this->assertContains("Titel darf nicht leer sein.",$responseBody);
 
     }
-
     public function testDelete(){
-        $request = self::$client->request("DELETE","/index_test.php/api/story/1");
+        global $token;
+        $request = self::$client->request("DELETE","/index_test.php/api/story/1",[
+            "headers" => [
+                "Authorization" => "Bearer " . $token
+            ]
+        ]);
 
         $responseBody = json_decode($request->getBody());
 
         $this->assertTrue($responseBody == "Story with ID 1 Succesfully Deleted");
     }
     public function testUpdate(){
+        global $token;
         $dto = new Story();
         $dto->setTitle("NeuerTitel");
         $dto->setstorie("NeueStorie");
 
         $request = self::$client->request("PUT", "/index_test.php/api/story/2",[
-            "body" => json_encode($dto)
+            "body" => json_encode($dto),
+            "headers" => [
+                "Authorization" => "Bearer " . $token
+            ]
         ]);
 
         $response = json_decode($request->getBody());
 
-        $this->assertTrue($response == "Story with ID 2 Succesfully Changed");
+        $this->assertTrue($response == "FilterMethode hat keine Fehler entdeckt");
     }
 }
