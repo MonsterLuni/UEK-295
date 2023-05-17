@@ -1,5 +1,39 @@
 {% extends 'base.html.twig' %}
 {% block title %}Archive of Myself{% endblock %}
 {% block body %}
-    <h2>Hallo</h2>
+    <style>
+        .example-wrapper { background-color: #1b1b1b; margin: 1em auto; max-width: 1000px; width: 95%; font: 18px/1.5 sans-serif; display: flex; flex-direction: column; align-items: center; }
+        .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
+        body{
+            background-color: #3b4151;
+            color: white;
+        }
+        #filter{
+            height: auto;
+            width: 70%;
+            border-radius: 20px;
+            background-color: #222222;
+            margin-bottom: 5vh;
+            margin-top: 5vh;
+            display: flex;
+            flex-direction: column;
+            align-content: center;
+            text-align: center;
+            padding-bottom: 5vh;
+        }
+    </style>
+    <div class="example-wrapper">
+    <div id="filter">
+        <h2>Login</h2>
+        <form action="./login" method="GET">
+            <p>Username:</p>
+            <input placeholder="Luca Moser" maxlength="50" type="text" name="username" required>
+            <p>Password:</p>
+            <input placeholder="MeinLieblingshund123" maxlength="50" type="text" name="password" required>
+            <br>
+            <br>
+            <input type="submit" value="SUBMIT">
+        </form>
+    </div>
+    </div>
 {% endblock %}

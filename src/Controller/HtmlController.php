@@ -3,13 +3,17 @@
 namespace App\Controller;
 
 use App\DTO\FilterStory;
+use App\Entity\User;
 use App\Repository\StoryRepository;
+use App\Repository\UserRepository;
 use FOS\RestBundle\Controller\Annotations as Rest;
 use JMS\Serializer\SerializerInterface;
 use Psr\Log\LoggerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
+use Symfony\Component\PasswordHasher\PasswordHasherInterface;
 use Symfony\Component\Routing\Annotation\Route;
 
 #[Route('/ArchiveOfMyself', name: 'ArchiveOfMyself_')]
@@ -50,15 +54,23 @@ class HtmlController extends AbstractController
     }
 
     #[Rest\Get('/login', name: 'twig_html')]
-    public function login(StoryRepository $repository): Response
+    public function login(Request $request, UserRepository $repository, UserPasswordHasherInterface $passwordHasher): Response
     {
-        $name = 'Luca Moser';
 
-        $kommentar = $repository->findAll();
+        if($request->get('username') != null){
+            $user = new User();
+            $user->setUsername($request->get('username'));
+            $password = $passwordHasher->hashPassword($user, $request->get('password'));
+            $user->setPassword($password);
 
-        return $this->render('html/login.html.twig', [
-            'storys' => $kommentar,
-            'user_name' => $name,
-        ]);
+            $repository->save($user, true);
+
+            return $this->redirect('http://127.0.0.1:8000/ArchiveOfMyself/register');
+        }
+        else{
+            return $this->render('html/login.html.twig', [
+
+            ]);
+        }
     }
 }
