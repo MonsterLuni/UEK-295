@@ -5,9 +5,7 @@ namespace App\Repository;
 use App\DTO\FilterStory;
 use App\Entity\Story;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
-use Doctrine\ORM\Query;
 use Doctrine\Persistence\ManagerRegistry;
-use http\Env\Response;
 use Psr\Log\LoggerInterface;
 
 /**

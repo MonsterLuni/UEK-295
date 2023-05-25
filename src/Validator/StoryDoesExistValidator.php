@@ -12,16 +12,13 @@ class StoryDoesExistValidator extends ConstraintValidator
     {
     }
 
-
         public function validate($idStory, Constraint $constraint): void
         {
             $story = $this->repository->find($idStory);
 
-            $message = $constraint->__get("message");
-
             if (!$story) {
                 $this->context
-                    ->buildViolation($message)
+                    ->buildViolation($constraint->message)
                     ->setParameter('{{StoryId}}', $idStory)
                     ->addViolation();
             }

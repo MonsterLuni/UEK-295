@@ -14,9 +14,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
-use Symfony\Component\PasswordHasher\PasswordHasherInterface;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Contracts\HttpClient\HttpClientInterface;
 
 #[Route('/ArchiveOfMyself', name: 'ArchiveOfMyself_')]
 class HtmlController extends AbstractController
@@ -58,8 +56,7 @@ class HtmlController extends AbstractController
     #[Rest\Get('/register', name: 'twig_register')]
     public function register(Request $request, UserRepository $repository, UserPasswordHasherInterface $passwordHasher): Response
     {
-
-        if($request->get('username') != null){
+        if (null != $request->get('username')) {
             $user = new User();
             $user->setUsername($request->get('username'));
             $password = $passwordHasher->hashPassword($user, $request->get('password'));
@@ -68,8 +65,7 @@ class HtmlController extends AbstractController
             $repository->save($user, true);
 
             return $this->redirect('http://127.0.0.1:8000/ArchiveOfMyself/register');
-        }
-        else{
+        } else {
             return $this->render('html/register.html.twig', []);
         }
     }
@@ -77,25 +73,25 @@ class HtmlController extends AbstractController
     #[Rest\Get('/login', name: 'twig_login')]
     public function login(Request $request): Response
     {
-        if($request->get('username_r') != null){
+        if (null != $request->get('username_r')) {
             $user = new User();
             $user->setUsername($request->get('username_l'));
             $user->setPassword($request->get('password_l'));
 
             $client = new Client();
-            $response = $client->post("http://localhost:8000/api/login_check",
+            $response = $client->post('http://localhost:8000/api/login_check',
                 [
-                    "json" => json_encode(
+                    'json' => json_encode(
                         [
-                            "username" => $user->getUsername(),
-                            "password" => $user->getPassword()
+                            'username' => $user->getUsername(),
+                            'password' => $user->getPassword(),
                         ]),
-                    'timeout' => 10
+                    'timeout' => 10,
                 ]
             );
+
             return $this->redirect('http://127.0.0.1:8000/ArchiveOfMyself/home');
-        }
-        else{
+        } else {
             return $this->render('html/login.html.twig');
         }
     }

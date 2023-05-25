@@ -155,7 +155,7 @@ class StoryController extends AbstractFOSRestController
 
         // Zum Validieren vom $dto in der Datei CreateUpdateStory.php (bezieht sich auf Function validateDTO)
         $errorResponse = $this->validateDTO($dto, ['create']);
-        if ($errorResponse != null) {
+        if (null != $errorResponse) {
             return $errorResponse;
         }
 
@@ -251,7 +251,7 @@ class StoryController extends AbstractFOSRestController
 
         // Zum Validieren vom $dto in der Datei CreateUpdateStory.php (bezieht sich auf Function validateDTO)
         $errorResponse = $this->validateDTO($dto, ['update']);
-        if ($errorResponse != null) {
+        if (null != $errorResponse) {
             return $errorResponse;
         }
         if (null == $dto->title) {

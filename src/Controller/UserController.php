@@ -12,7 +12,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
-class   UserController extends AbstractFOSRestController
+class UserController extends AbstractFOSRestController
 {
     public function __construct(private SerializerInterface $serializer,
         private UserRepository $repository)

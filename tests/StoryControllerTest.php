@@ -18,100 +18,107 @@ class StoryControllerTest extends WebTestCase
     public static function setUpBeforeClass(): void
     {
         self::$client = new Client([
-            "base_uri" => "http://localhost:8000"
+            'base_uri' => 'http://localhost:8000',
         ]);
 
         $client = self::createClient();
         self::$application = new Application($client->getKernel());
         self::$application->setAutoExit(false);
 
-        self::$application->run(new StringInput("doctrine:database:drop --if-exists --force"));
-        self::$application->run(new StringInput("doctrine:database:create --quiet"));
-        self::$application->run(new StringInput("doctrine:schema:create"));
-        self::$application->run(new StringInput("doctrine:fixtures:load --group=fakedata"));
+        self::$application->run(new StringInput('doctrine:database:drop --if-exists --force'));
+        self::$application->run(new StringInput('doctrine:database:create --quiet'));
+        self::$application->run(new StringInput('doctrine:schema:create'));
+        self::$application->run(new StringInput('doctrine:fixtures:load --group=fakedata'));
     }
-    //erkennt es dadurch, dass es mit test anfängt
-    public function testGet(){
 
-        $requestLogin = self::$client->request("POST","/index_test.php/api/login_check",[
-            "body" => json_encode([
-                "username" => "TestAdmin",
-                "password" => "123"
-            ])
+    // erkennt es dadurch, dass es mit test anfängt
+    public function testGet()
+    {
+        $requestLogin = self::$client->request('POST', '/index_test.php/api/login_check', [
+            'body' => json_encode([
+                'username' => 'TestAdmin',
+                'password' => '123',
+            ]),
         ]);
         global $token;
         $token = json_decode($requestLogin->getBody())->token;
 
-        $request = self::$client->request("GET","/index_test.php/api/story",[
-            "headers" => [
-                "Authorization" => "Bearer " . $token
-            ]
+        $request = self::$client->request('GET', '/index_test.php/api/story', [
+            'headers' => [
+                'Authorization' => 'Bearer '.$token,
+            ],
         ]);
-        $this->assertTrue($request->getStatusCode() == 200);
+        $this->assertTrue(200 == $request->getStatusCode());
     }
-    public function testPost(){
+
+    public function testPost()
+    {
         global $token;
         $dto = new CreateUpdateStory();
-        $dto->title = "";
-        $dto->author = "Luca Moser";
-        $dto->storie = "Die mutter ist Schlimm";
+        $dto->title = '';
+        $dto->author = 'Luca Moser';
+        $dto->storie = 'Die mutter ist Schlimm';
 
         $response = null;
         try {
-            $request = self::$client->request("POST","/index_test.php/api/story",[
-                "body" => json_encode($dto),
-                "headers" => [
-                "Authorization" => "Bearer " . $token
-            ]
+            $request = self::$client->request('POST', '/index_test.php/api/story', [
+                'body' => json_encode($dto),
+                'headers' => [
+                'Authorization' => 'Bearer '.$token,
+            ],
             ]);
-        }
-        catch (ClientException $ex){
+        } catch (ClientException $ex) {
             $response = $ex->getResponse();
         }
 
         $responseBody = json_decode($response->getBody());
 
-        $this->assertTrue($response->getStatusCode() == 400);
-        $this->assertContains("Titel darf nicht leer sein.",$responseBody);
-
+        $this->assertTrue(400 == $response->getStatusCode());
+        $this->assertContains('Titel darf nicht leer sein.', $responseBody);
     }
-    public function testDelete(){
+
+    public function testDelete()
+    {
         global $token;
-        $request = self::$client->request("DELETE","/index_test.php/api/story/1",[
-            "headers" => [
-                "Authorization" => "Bearer " . $token
-            ]
+        $request = self::$client->request('DELETE', '/index_test.php/api/story/1', [
+            'headers' => [
+                'Authorization' => 'Bearer '.$token,
+            ],
         ]);
 
         $responseBody = json_decode($request->getBody());
 
-        $this->assertTrue($responseBody == "Story with ID 1 Succesfully Deleted");
+        $this->assertTrue('Story with ID 1 Succesfully Deleted' == $responseBody);
     }
-    public function testUpdate(){
+
+    public function testUpdate()
+    {
         global $token;
         $dto = new Story();
-        $dto->setTitle("NeuerTitel");
-        $dto->setstorie("NeueStorie");
+        $dto->setTitle('NeuerTitel');
+        $dto->setstorie('NeueStorie');
 
-        $request = self::$client->request("PUT", "/index_test.php/api/story/2",[
-            "body" => json_encode($dto),
-            "headers" => [
-                "Authorization" => "Bearer " . $token
-            ]
+        $request = self::$client->request('PUT', '/index_test.php/api/story/2', [
+            'body' => json_encode($dto),
+            'headers' => [
+                'Authorization' => 'Bearer '.$token,
+            ],
         ]);
 
         $response = json_decode($request->getBody());
 
-        $this->assertTrue($response == "FilterMethode hat keine Fehler entdeckt");
+        $this->assertTrue('FilterMethode hat keine Fehler entdeckt' == $response);
     }
-    public function testGetComment(){
+
+    public function testGetComment()
+    {
         global $token;
 
-        $request = self::$client->request("GET","/index_test.php/api/comment",[
-            "headers" => [
-                "Authorization" => "Bearer " . $token
-            ]
+        $request = self::$client->request('GET', '/index_test.php/api/comment', [
+            'headers' => [
+                'Authorization' => 'Bearer '.$token,
+            ],
         ]);
-        $this->assertTrue($request->getStatusCode() == 200);
+        $this->assertTrue(200 == $request->getStatusCode());
     }
 }
