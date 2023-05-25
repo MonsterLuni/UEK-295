@@ -93,8 +93,6 @@ class HtmlController extends AbstractController
                     'timeout' => 10
                 ]
             );
-
-            var_dump($response->getBody()); die;
             return $this->redirect('http://127.0.0.1:8000/ArchiveOfMyself/home');
         }
         else{

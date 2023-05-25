@@ -24,10 +24,17 @@ class UserFakeFixtures extends Fixture implements FixtureGroupInterface
 
             $userentity = new User();
             $userentity->setUsername("TestUser");
-            $hashedPassword = $this->passwordHasher->hashPassword($userentity, "1234");
+            $hashedPassword = $this->passwordHasher->hashPassword($userentity, "123");
             $userentity->setPassword($hashedPassword);
-            $userentity->setRoles(['ROLE_ADMIN', 'ROLE_USER']);
+            $userentity->setRoles(['ROLE_USER']);
             $manager->persist($userentity);
+
+            $adminentity = new User();
+            $adminentity->setUsername("TestAdmin");
+            $hashedPassword = $this->passwordHasher->hashPassword($userentity, "123");
+            $adminentity->setPassword($hashedPassword);
+            $adminentity->setRoles(['ROLE_ADMIN', 'ROLE_USER']);
+            $manager->persist($adminentity);
 
         $manager->flush();
     }

@@ -35,8 +35,8 @@ class StoryControllerTest extends WebTestCase
 
         $requestLogin = self::$client->request("POST","/index_test.php/api/login_check",[
             "body" => json_encode([
-                "username" => "TestUser",
-                "password" => "1234"
+                "username" => "TestAdmin",
+                "password" => "123"
             ])
         ]);
         global $token;
@@ -103,5 +103,15 @@ class StoryControllerTest extends WebTestCase
         $response = json_decode($request->getBody());
 
         $this->assertTrue($response == "FilterMethode hat keine Fehler entdeckt");
+    }
+    public function testGetComment(){
+        global $token;
+
+        $request = self::$client->request("GET","/index_test.php/api/comment",[
+            "headers" => [
+                "Authorization" => "Bearer " . $token
+            ]
+        ]);
+        $this->assertTrue($request->getStatusCode() == 200);
     }
 }
